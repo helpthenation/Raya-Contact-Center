@@ -1,0 +1,112 @@
+<odoo>
+  <data>
+  <!-- applicant Screening Q -->
+        <record id="applicant_screening_question_view_form" model="ir.ui.view">
+            <field name="name">hr_recruitment.hr.applicant.form</field>
+            <field name="model">hr.applicant</field>
+            <field name="arch" type="xml">
+            <form>
+            <field name="question" string="Questions">
+                <tree string="Screening Questions" editable="bottom" delete="0" create="0">
+                    <field name="question" string='Questions'/>
+                    <field name="answer" string="Yes/No"/>
+                    <field name="note" string="Yes/No"/>
+                </tree>
+                </field>
+                </form>
+            </field>
+        </record>
+        <record id="applicant_screening_question_action" model="ir.actions.act_window">
+            <field name="name">Screening Questions</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.applicant</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="applicant_screening_question_view_form"/>
+            <field name="target">new</field>
+        </record>
+<record id="view_hr_applicant_form" model="ir.ui.view">
+			<field name="name">view.hr.applicant.form</field>
+			<field name="model">hr.applicant</field>
+			<field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form" />
+			<field name="arch" type="xml">
+      <xpath expr="//form/sheet/group/group[4]" position="inside">
+      <field name="is_initial" string="initial" invisible="1"/>
+      <field name="is_final" string="final" invisible="1"/>
+      </xpath>
+      <xpath expr="//notebook" position="inside">
+          <page name="screening_monitor" string="Screening Questions" attrs="{'invisible':['|',('is_initial', '=', True),('is_final', '=', True)]}">
+            <field name="black_listed" invisible="1"/>
+            <field name="question" string="Questions" attrs="{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}">
+                  <tree string="Screening Questions" editable="bottom" delete="0" create="0">
+                      <field name="question" string='Questions' readonly="1" force_save="1"/>
+                      <field name="answer" string='Yes/No'/>
+                      <field name="note" string='Note'/>
+                  </tree>
+            </field>
+          </page>
+          </xpath>
+          </field>
+          </record>
+  <!-- hr.job Q page -->
+  <record id="view_job_form2" model="ir.ui.view">
+            <field name="name">hr.job.form</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="wc_screening_excel.hr_job_form_excel"/>
+            <field name="arch" type="xml">
+              <field name="excel_check" position="before">
+                <field name="screening_check"/>
+              </field>
+
+            </field>
+    </record>
+  <record id="view_job_form" model="ir.ui.view">
+            <field name="name">hr.job.form</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_hr_job_form"/>
+            <field name="arch" type="xml">
+
+            <xpath expr="//form/sheet/notebook" position="inside">
+                        <page name="screening_questions" string="Screening Questions" groups="hr_recruitment.group_hr_recruitment_user"  attrs="{'invisible':[('screening_check','!=',True)]}">
+                                          <field name="question" string="Questions">
+                                           <tree string="Screening Questions" editable="top">
+             <field name="question" string='question'/>
+      </tree>
+                                          </field>
+                        </page>
+                  </xpath>
+            </field>
+    </record>
+  <!-- screeening Q configuration -->
+    <record model="ir.ui.view" id="kpi_category_tree_view">
+     <field name="name">screening.questions.form</field>
+     <field name="model">screening_questions</field>
+     <field name="arch" type="xml">
+         <form string="Screening Questions">
+           <sheet>
+
+               <group>
+                 <field name="question"/>
+               </group>
+           </sheet>
+         </form>
+     </field>
+     </record>
+     <record model="ir.actions.act_window" id="screening_questions">
+      <field name="name">Screening Questions</field>
+      <field name="res_model">screening_questions</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.ui.view" id="screening_questions_tree_view">
+     <field name="name">screening.questions.tree</field>
+     <field name="model">screening_questions</field>
+     <field name="arch" type="xml">
+         <tree string="Screening Questions">
+                  <field name="question" />
+         </tree>
+     </field>
+     </record>
+
+<menuitem name="Screening Questions" id="screening_questions_menu" parent="hr_recruitment.menu_hr_recruitment_configuration"
+              action="screening_questions" groups="hr_recruitment.group_hr_recruitment_manager"/>
+  </data>
+</odoo>

@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+		<template id="account_sign_up_details_id" inherit_id="auth_signup.fields">
+	      <xpath expr="//div[@class='form-group field-confirm_password']" position="after">
+	          	<div class="form-group field-name">
+	                <label for="national_id" class="control-label">Your National ID *</label>
+	                <input type="text" name="national_id" t-att-value="national_id" id="national_id" class="form-control" maxlength="14" minlength="14"
+	                required="required" t-att-readonly="'readonly' if only_passwords else None"
+	                t-att-autofocus="'autofocus' if login and not only_passwords else None" />
+            	</div>
+	      </xpath>
+	   	</template>
+  	</data>
+</odoo>

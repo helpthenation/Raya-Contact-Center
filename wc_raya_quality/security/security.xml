@@ -1,0 +1,8 @@
+<odoo>
+<data noupdate="1">
+         <record id="system_hr_recruitment_quality_team" model="res.groups">
+        <field name="name">TA Quality Team</field>
+        <field name="category_id" ref="base.module_category_human_resources_recruitment"/>
+    </record>
+  </data>
+</odoo>

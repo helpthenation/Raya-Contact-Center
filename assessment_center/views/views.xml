@@ -1,0 +1,551 @@
+<odoo>
+  <data>
+    <!-- Hr Job override -->
+      <record model="ir.ui.view" id="wc_hr_job_assessmnet_center">
+        <field name="name">wc_hr_job_assessmnet_center</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+          <field name="employee_grade" position="after">
+            <field name="grade_has_assessment" invisible="1"/>
+            <field name="has_assessment" attrs="{'invisible':[('grade_has_assessment','=',True)]}"/>
+          </field>
+        </field>
+      </record>
+    <!-- Survey User Input override -->
+      <record model="ir.ui.view" id="wc_survey_user_input_assessmnet_center">
+        <field name="name">wc_survey_user_input_assessmnet_center</field>
+        <field name="model">survey.user_input</field>
+        <field name="inherit_id" ref="survey.survey_user_input_view_form"/>
+        <field name="arch" type="xml">
+          <field name="access_token" position="after">
+            <field name="assessment_id" string="Assessment" force_save="1" readonly="1"/>
+          </field>
+          <xpath expr="//form/sheet/field[@name='user_input_line_ids']/tree/field[@name='answer_type']" position="after">
+            <field name="suggested_answer_id"/>
+          </xpath>
+        </field>
+      </record>
+  <!-- Email templates override -->
+    <record model="ir.ui.view" id="wc_mail_template_assessmnet_center">
+      <field name="name">wc_mail_template_talent_exts</field>
+      <field name="model">mail.template</field>
+      <field name="inherit_id" ref="mail.email_template_form"/>
+      <field name="arch" type="xml">
+        <field name="model_id" position="after">
+          <field name="assessment_test" string="Assessment Test"/>
+          <field name="assessment_meeting" string="Assessment Meeting"/>
+        </field>
+      </field>
+    </record>
+  <!-- Employee assessment view -->
+    <record model="ir.ui.view" id="assessment_test_employee_form">
+            <field name="name">Form view for employee</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <div name="button_box" position="inside">
+                <button type="object" name="action_open_assessments" class="oe_stat_button" icon="fa-star-half-o" attrs="{'invisible': [('assessment_count', '=', 0)]}">
+              <field name="assessment_count" string="Assessments" widget="statinfo"></field>
+            </button>
+                </div>
+            </field>
+            </record>
+
+<!-- Meeting -->
+  <!-- Wizard -->
+    <record id="view_create_task_meeting" model="ir.ui.view">
+                <field name="name">create.task.meeting.name</field>
+                <field name="model">meeting.date</field>
+                <field name="arch" type="xml">
+                    <form string="Meeting">
+                        <group>
+                            <field name="start_date"/>
+                        </group>
+                        <footer>
+                            <button name="get_data" string="Create Meeting"
+                              type="object" class="oe_highlight"/>
+                            <button string="Cancel" class="btn-default" special="cancel" />
+                      </footer>
+                    </form>
+                </field>
+            </record>
+            <record id="open_wizard_action_id" model="ir.actions.act_window">
+            <field name="name">Create Meeting</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">meeting.date</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+    </record>
+  <!-- meeting action -->
+    <record id="action_calendar_event" model="ir.actions.act_window">
+        <field name="name">Meetings</field>
+        <field name="res_model">calendar.event</field>
+        <field name="view_mode">calendar,tree,form</field>
+        <field name="view_id" ref="calendar.view_calendar_event_calendar"/>
+        <field name="search_view_id" ref="calendar.view_calendar_event_search"/>
+        <field name="domain">[('task_id', '=', active_id)]</field>
+        <field name="context">{
+                'search_default_task_id': [active_id],
+                'default_task_id': active_id,
+            }</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Schedule a new meeting
+          </p>
+        </field>
+    </record>
+  <!-- inherit calendar.event form for add task -->
+    <record id="view_calendar_event_form_inherit" model="ir.ui.view">
+          <field name="name">view.calendar.form.inherit</field>
+          <field name="model">calendar.event</field>
+          <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+          <field name="arch" type="xml">
+              <button name="action_open_calendar_event" position="replace">
+                  <div class="oe_button_box" name="button_box">
+                        <button string="Document" class="oe_stat_button float-right" icon="fa-bars" type="object" name="action_open_calendar_event" />
+                  </div>
+
+              </button>
+              <field name="user_id" position="after">
+                <field name="assign_to" string="Assessment Responsible" attrs="{'invisible':[('assessment_id','=',False)]}"/>
+              </field>
+              <field name="location" position="after">
+                  <field name="task_id"/>
+                  <field name="assessment_id" invisible="1"/>
+              </field>
+          </field>
+      </record>
+
+
+
+<!-- survey form override -->
+  <record model="ir.ui.view" id="assessment_test_survey_form">
+          <field name="name">Form view for survey</field>
+          <field name="model">survey.survey</field>
+          <field name="inherit_id" ref="survey.survey_form" />
+          <field name="arch" type="xml">
+              <xpath expr="//form/sheet/group/group" position="inside">
+              <field name="assessment_test" string="Asseessment Test" />
+              </xpath>
+          </field>
+  </record>
+
+
+
+
+
+<!-- explicit list view definition -->
+<!-- Assessment Dashboard -->
+    <!-- Search view -->
+
+
+      <!-- kanban view -->
+        <record model="ir.ui.view" id="assessment_center_kanban_view">
+                <field name="name">Assessment Center  kanban</field>
+                <field name="model">assessment_center.assessment_center</field>
+                <field name="arch" type="xml">
+                    <kanban default_group_by="stage_id" class="o_kanban_applicant" quick_create_view="assessment_center.quick_create_assessment_form" sample="1">
+                        <field name="stage_id" options='{"group_by_tooltip": {"requirements": "Requirements"}}'/>
+                        <field name="color"/>
+                        <field name="priority"/>
+                        <field name="user_id"/>
+                        <field name="user_email"/>
+                        <field name="name"/>
+                        <field name="app_name"/>
+                        <field name="job_id"/>
+                        <field name="email"/>
+                        <field name="mobile"/>
+                        <field name="department_id"/>
+                        <field name="project"/>
+                        <field name="attachment_number"/>
+                        <field name="active"/>
+                        <templates>
+                            <t t-name="kanban-box">
+                                <div t-attf-class="{{!selection_mode ? 'oe_kanban_color_' + kanban_getcolor(record.color.raw_value) : ''}} oe_kanban_card oe_kanban_global_click oe_applicant_kanban oe_semantic_html_override">
+                                    <span class="badge badge-pill badge-danger pull-right mr-4" attrs="{'invisible': [('active', '=', True)]}">Refused</span>
+                                    <div class="o_dropdown_kanban dropdown">
+                                        <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Dropdown menu" data-display="static">
+                                            <span class="fa fa-ellipsis-v"/>
+                                        </a>
+                                        <div class="dropdown-menu" role="menu">
+                                            <t t-if="widget.deletable"><a role="menuitem" type="delete" class="dropdown-item">Delete</a></t>
+                                            <a role="menuitem" name="action_makeMeeting" type="object" class="dropdown-item">Schedule Interview</a>
+                                            <div role="separator" class="dropdown-divider"></div>
+                                            <ul class="oe_kanban_colorpicker text-center" data-field="color"/>
+                                        </div>
+                                    </div>
+                                    <div class="oe_kanban_content">
+                                        <div class="o_kanban_record_top">
+                                            <div class="o_kanban_record_headings">
+                                              <b class="o_kanban_record_title mt8" t-if="record.name.raw_value">
+                                                    <field name="name"/><br/>
+                                                </b><t t-else="1">
+                                                    <i class="o_kanban_record_title"><field name="app_name"/></i><br/>
+                                                </t>
+                                                <div class="o_kanban_record_subtitle" invisible="context.get('search_default_job_id', False)">
+                                                    <field name="job_id"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="o_kanban_record_bottom mt4">
+                                            <div class="oe_kanban_bottom_left">
+                                                <div class="float-left mr4" groups="base.group_user">
+                                                    <field name="priority" widget="priority"/>
+                                                </div>
+                                                <div class="o_kanban_inline_block mr8">
+                                                    <field name="activity_ids" widget="kanban_activity"/>
+                                                </div>
+                                            </div>
+                                            <div class="oe_kanban_bottom_right">
+                                                <div class="o_kanban_state_with_padding ml-1 mr-2" >
+                                                    <field name="kanban_state" widget="kanban_state_selection"/>
+                                                    <field name="legend_normal" invisible="1"/>
+                                                    <field name="legend_blocked" invisible="1"/>
+                                                    <field name="legend_done" invisible="1"/>
+                                                </div>
+                                                <field name="user_id" widget="many2one_avatar_user"/>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="oe_clear"></div>
+                                </div>
+                            </t>
+                        </templates>
+                    </kanban>
+                </field>
+        </record>
+
+      <!-- Tree view -->
+        <record model="ir.ui.view" id="assessment_center_list">
+          <field name="name">Assessment Center</field>
+          <field name="model">assessment_center.assessment_center</field>
+          <field name="arch" type="xml">
+            <tree>
+              <field name="name"/>
+              <field name="app_name"/>
+              <field name="job_id"/>
+              <field name="email"/>
+              <field name="mobile"/>
+              <field name="department_id"/>
+              <field name="project"/>
+            </tree>
+          </field>
+        </record>
+
+     <!-- Form view -->
+     <!-- open -->
+      <record id="open_view_assessment_list" model="ir.actions.act_window">
+              <field name="name">Assessment</field>
+              <field name="res_model">assessment_center.assessment_center</field>
+              <field name="view_mode">form,tree</field>
+              <field name="view_id" eval="False"/>
+          </record>
+     <!-- normal -->
+        <record model="ir.ui.view" id="assessment_center_view_form">
+        <field name="name">assessment_center Form</field>
+        <field name="model">assessment_center.assessment_center</field>
+        <field name="arch" type="xml">
+          <form string="Assessment Center Form" class="o_applicant_form">
+            <header>
+                <button name="%(open_wizard_action_id)d" type="action" string="Assessment Invite" class="oe_highlight" attrs="{'invisible':['|',('readonly_user','=',True),('in_progress','!=',True)]}"/>
+                <!-- <button name="action_send_assessment_meeting_email" string="Share Document" class="oe_highlight" type="object" attrs="{'invisible':['|','|',('readonly_user','=',True),('in_progress','!=',True),('meeting_count','=',0)]}"></button> -->
+                <button name="action_send_survey" class="oe_highlight" string="Send Test" type="object" attrs="{'invisible':['|','|',('readonly_user','=',True),('in_progress','!=',True),('answer_id','!=',False)]}"></button>
+                <button name="action_print_answers" class="oe_highlight" string="Print" type="object" attrs="{'invisible':[('answer_id','=',False)]}"/>
+                <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}" attrs="{'invisible': [('active', '=', False),('emp_id', '=', False)],'readonly':[('readonly_user','=',True)]}"/>
+                <field name="readonly_user" invisible="1"/>
+                <button name="send_final_report" class="oe_highlight" string="Send Final Report" type="object" attrs="{'invisible':[('done','=',False)]}"/>
+            </header>
+            <sheet>
+                <div class="oe_button_box" name="button_box">
+                  <button class="oe_stat_button" icon="fa-calendar" name="%(action_calendar_event)d" type="action" attrs="{'invisible': ['|',('readonly_user','=',True),('meeting_count', '=', 0)]}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Meeting</span>
+                        <field name="meeting_count"/>
+                    </div>
+                  </button>
+                  <!-- survey smart button -->
+                <button name="action_survey_user_input_completed" type="object" string="ANSWER"
+                                    class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':[('answer_id','=',False)]}">
+                </button>
+                </div>
+                <widget name="web_ribbon" title="Refused" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                <field name="kanban_state" widget="kanban_state_selection"/>
+                <field name="active" invisible="1"/>
+                <field name="legend_normal" invisible="1"/>
+                <field name="legend_blocked" invisible="1"/>
+                <field name="legend_done" invisible="1"/>
+                <field name="answer_id" invisible="1"/>
+                <div class="oe_title">
+                    <label for="name" class="oe_edit_only"/>
+                    <h1><field name="name" attrs="{'readonly':[('stage_id','!=',False),('draft','!=',True),'|',('readonly_user','=',True)],'force_save':[('draft','!=',True)]}"/></h1>
+                    <label for="app_name" class="oe_edit_only"/>
+                    <h2><field name="app_name" attrs="{'readonly':['|','|','|',('stage_id','!=',False),('in_progress','=',True),('done','=',True),('readonly_user','=',True)],'force_save':[('draft','!=',True)]}"/></h2>
+                </div>
+                <group>
+                <group>
+                <field name="meeting_id" invisible="1"/>
+                <field name="partner_id" readonly="1" force_save="1"/>
+                <field name="job_id" readonly="1" force_save="1"/>
+                <field name="email" readonly="1" force_save="1"/>
+                <field name="mobile" readonly="1" force_save="1"/>
+                <field name="department_id" readonly="1" force_save="1"/>
+                <field name="project" readonly="1" force_save="1"/>
+                <field name="has_assessment_test" attrs="{'readonly':['|',('readonly_user','=',True),'|',('in_progress','=',True),('done','=',True)]}"/>
+                <field name="assessment_test" attrs="{'readonly':['|',('readonly_user','=',True),('done','=',True)],'invisible':[('has_assessment_test','=',False)]}"/>
+                <field name="score" readonly="1" force_save="1" attrs="{'invisible':[('has_assessment_test','=',False)]}"/>
+                <field name="meeting_location" widget="radio" attrs="{'readonly':['|',('readonly_user','=',True),('done','=',True)]}"/>
+                <field name="assign_to" attrs="{'readonly':[('stage_id','!=',False),('draft','!=',True),'|',('readonly_user','=',True)]}"/>
+                </group>
+                <group>
+            <field name="emp_id" readonly="1" force_save="1" attrs="{'invisible':[('emp_id','=',False)]}"/>
+            <field name="hr_id" readonly="1" force_save="1" attrs="{'invisible':[('emp_id','=',False)]}"/>
+            <field name="manager" readonly="1" force_save="1" attrs="{'invisible':[('emp_id','=',False)]}"/>
+            <field name="manager_email" readonly="1" force_save="1" attrs="{'invisible':[('emp_id','=',False)]}"/>
+            <field name="emp_project" readonly="1" force_save="1" attrs="{'invisible':[('emp_id','=',False)]}"/>
+                </group>
+          <field name="draft" invisible="1"/>
+          <field name="in_progress" invisible="1"/>
+          <field name="done" invisible="1"/>
+                </group>
+                <notebook>
+          <page name="documents" string="Documents" attrs="{'invisible':[('readonly_user','=',True)]}">
+          <group>
+          <field name="attachements" string="Attachements" widget="many2many_binary" attrs="{'readonly':['|',('readonly_user','=',True),('done','=',True)]}"/>
+          <field name="templates_ids" string="Templates"  attrs="{'readonly':['|',('readonly_user','=',True),('done','=',True)]}"/>
+          </group>
+          </page>
+          <page name="outcome" string="Reports" attrs="{'invisible':['|','|',('readonly_user','=',True),('stage_id','=',False),('draft','=',True)]}">
+          <group>
+            <group>
+            <field name="assessment_report" widget="many2many_binary" attrs="{'readonly':['|',('readonly_user','=',True),('done','=',True)]}"/>
+            </group>
+          <field name="dos_ids" attrs="{'readonly':['|',('readonly_user','=',True),('done','=',True)]}">
+            <tree editable="bottom">
+              <field name="name" />
+              <field name="attachment" widget="many2many_binary" />
+            </tree>
+            <form>
+              <group col="4">
+                <field name="name" />
+                <!-- <field name="doc_type"/> -->
+              </group>
+            </form>
+          </field>
+          </group>
+          </page>
+          <page string="Results" attrs="{'invisible':['|',('stage_id','=',False),('draft','=',True)]}">
+            <group>
+              <field name="final_result" attrs="{'readonly':['|',('readonly_user','=',True),('done','=',True)]}"/>
+            </group>
+          </page>
+          </notebook>
+            </sheet>
+            <div class="oe_chatter">
+                <field name="message_follower_ids"/>
+                <field name="activity_ids"/>
+                <field name="message_ids" options="{'open_attachments': True}"/>
+            </div>
+          </form>
+        </field>
+      </record>
+    <!-- quick create form -->
+      <record id="quick_create_assessment_form" model="ir.ui.view">
+          <field name="name">Assessment Center</field>
+          <field name="model">assessment_center.assessment_center</field>
+          <field name="priority">1000</field>
+          <field name="arch" type="xml">
+              <form>
+                  <group>
+                      <field name="name"/>
+                      <field name="app_name"/>
+                  </group>
+              </form>
+          </field>
+        </record>
+    <!-- Assessment Templates -->
+    <!-- Tree view -->
+      <record model="ir.ui.view" id="assessment_center_templates_tree">
+          <field name="name">templates.tree</field>
+          <field name="model">templates</field>
+          <field name="arch" type="xml">
+              <tree string="Templates">
+                  <field name="name"/>
+                  <field name="attachement" widget="many2many_binary"/>
+              </tree>
+          </field>
+      </record>
+    <!-- Form view -->
+      <record model="ir.ui.view" id="assessment_center_templates_form">
+          <field name="name">templates.form</field>
+          <field name="model">templates</field>
+          <field name="arch" type="xml">
+              <form string="Template">
+              <sheet>
+                <group>
+                  <group>
+                    <field name="name"/>
+                    <field name="attachement" widget="many2many_binary"/>
+                  </group>
+                </group>
+              </sheet>
+              </form>
+          </field>
+      </record>
+    <!-- Assessment Stage -->
+    <!-- Tree view -->
+      <record model="ir.ui.view" id="assessment_center_stage_tree">
+          <field name="name">assessment_center.stage.tree</field>
+          <field name="model">assessment_center.stage</field>
+          <field name="arch" type="xml">
+              <tree string="Stages">
+                  <field name="sequence" widget="handle"/>
+                  <field name="name"/>
+                  <field name="fold"/>
+              </tree>
+          </field>
+      </record>
+    <!-- kanban view -->
+      <record id="view_assessment_center_stage_kanban" model="ir.ui.view">
+          <field name="name">assessment_center.stage.kanban</field>
+          <field name="model">assessment_center.stage</field>
+          <field name="arch" type="xml">
+              <kanban>
+                  <field name="name"/>
+                  <field name="fold"/>
+                  <templates>
+                      <t t-name="kanban-box">
+                          <div t-attf-class="oe_kanban_global_click">
+                              <div>
+                                  <strong><field name="name"/></strong>
+                              </div>
+                              <div>
+                                  <span>Folded in Recruitment Pipe: </span>
+                                  <field name="fold" widget="boolean"/>
+                              </div>
+                          </div>
+                      </t>
+                  </templates>
+              </kanban>
+          </field>
+      </record>
+    <!-- Form view -->
+      <record model="ir.ui.view" id="assessment_center_stage_form">
+          <field name="name">assessment_center.stage.form</field>
+          <field name="model">assessment_center.stage</field>
+          <field name="arch" type="xml">
+              <form string="Stage">
+              <sheet>
+                  <group name="stage_definition" string="Stage Definition">
+                      <group>
+                          <field name="name"/>
+                          <field name="sequence" groups="base.group_no_one"/>
+                          <field name="template_id" domain= "[('model_id.model', '=', 'hr.applicant')]"/>
+                          <field name="draft"/>
+                          <field name="in_progress"/>
+                          <field name="done"/>
+                      </group>
+                      <group name="stage_details">
+                          <field name="fold"/>
+                      </group>
+                  </group>
+                  <group name="tooltips" string="Tooltips">
+                      <p class="text-muted" colspan="2">
+                          You can define here the labels that will be displayed for the kanban state instead
+                          of the default labels.
+                      </p>
+                      <label for="legend_normal" string=" " class="o_status"/>
+                      <field name="legend_normal" nolabel="1"/>
+                      <label for="legend_blocked" string=" " class="o_status o_status_red"/>
+                      <field name="legend_blocked" nolabel="1"/>
+                      <label for="legend_done" string=" " class="o_status o_status_green"/>
+                      <field name="legend_done" nolabel="1"/>
+                  </group>
+                  <separator string="Requirements"/>
+                  <field name="requirements"/>
+              </sheet>
+              </form>
+          </field>
+      </record>
+    <!-- actions opening views on models -->
+    <!-- assessment -->
+      <record model="ir.actions.act_window" id="assessment_center_dashboard_action">
+        <field name="name">Assessment Center</field>
+        <field name="res_model">assessment_center.assessment_center</field>
+        <field name="view_mode">kanban,tree,form</field>
+      </record>
+    <!-- Stage -->
+      <record model="ir.actions.act_window" id="assessment_center_stages_action">
+        <field name="name">Stages</field>
+        <field name="res_model">assessment_center.stage</field>
+        <field name="view_mode">tree,kanban,form</field>
+      </record>
+    <!-- Templates -->
+      <record model="ir.actions.act_window" id="assessment_center_templates_action">
+        <field name="name">Templates</field>
+        <field name="res_model">templates</field>
+        <field name="view_mode">tree,form</field>
+      </record>
+        <!-- HR Recruitment form editting -->
+        <record id="hr_recruitment_stage_form_editing" model="ir.ui.view">
+            <field name="name">hr.recruitment.stage.form</field>
+            <field name="model">hr.recruitment.stage</field>
+            <field name="inherit_id" ref="hr_recruitment.hr_recruitment_stage_form"/>
+            <field name="arch" type="xml">
+                  <xpath expr="//form/sheet/group/group[2]" position="inside">
+                                          <field name="shortlisting_assessment" attrs="{'invisible':[('job_category','!=','talent')]}"/>
+                  </xpath>
+            </field>
+                </record>
+                    <record id="view_hr_applicant_assess_form" model="ir.ui.view">
+                    <field name="name">view.hr.applicant.form</field>
+                    <field name="model">hr.applicant</field>
+                    <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form" />
+                    <field name="arch" type="xml">
+                    <xpath expr="//header" position="inside">
+                    <!-- <field name="assessment_id" invisible="1"/> -->
+                            <button string="SEND TO ASSESSMENT" name="create_assessment_from_applicant" type="object"
+                                class="oe_highlight o_create_employee" attrs="{'invisible':['|','|',('ass_counts','>=',1),('is_shortlisting_assessment','!=',True),('has_assessment','!=',True)]}"/>
+                        </xpath>
+                        <xpath expr="//div[@name='button_box']" position="inside">
+                                                <button name="action_view_assessment" type="object"
+                                                                    class="oe_stat_button" icon="fa-file-text" attrs="{'invisible':[('ass_counts','=',0)]}">
+                                                                    <field name="ass_counts" string="Assessment" widget="statinfo"/>
+                                                </button>
+
+                                            </xpath>
+                        <field name="emp_id" position="after">
+                        <field name="is_shortlisting_assessment" invisible="1"/>
+                        <field name="has_assessment" invisible="1"/>
+                        </field>
+                    </field>
+                </record>
+
+            <!-- employee Grade level editting-->
+            <record id="employee_grade_view_form_editing" model="ir.ui.view">
+                <field name="name">Employee Grade</field>
+                <field name="model">employee.grade</field>
+                <field name="inherit_id" ref="employee_enhancement.employee_grade_view_form"/>
+                <field name="arch" type="xml">
+                  <xpath expr="//field[@name='garde']" position="after">
+                                          <field name="has_assessment"/>
+                  </xpath>
+                </field>
+            </record>
+
+    <!-- Top menu item -->
+
+      <menuitem name="Assessment Center" id="assessment_center.menu_root" web_icon="assessment_center,static/description/Assessment.png"/>
+
+    <!-- menu categories -->
+
+      <menuitem name="Assessment" id="assessment_center.assessment" parent="assessment_center.menu_root" action="assessment_center_dashboard_action"/>
+      <menuitem name="Configuration" id="assessment_center.configuration" parent="assessment_center.menu_root" groups="group_assessment_team"/>
+
+    <!-- actions -->
+      <!--Configurations Menus  -->
+        <menuitem name="Stages" id="assessment_center.configuration_stages" parent="assessment_center.configuration" action="assessment_center_stages_action"/>
+        <menuitem name="Templates" id="assessment_center.configuration_templates" parent="assessment_center.configuration" action="assessment_center_templates_action"/>
+  </data>
+</odoo>

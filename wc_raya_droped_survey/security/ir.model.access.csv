@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dropped_survey_invite,wc_raya_droped_survey.dropped_survey_invite,model_dropped_survey_invite,,1,1,1,1

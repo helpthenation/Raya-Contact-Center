@@ -1,0 +1,114 @@
+<odoo>
+  <data>
+
+<!-- pivot report -->
+<!-- <record id="action_rdt_report" model="ir.actions.act_window">
+<field name="name">RDT raw data</field>
+<field name="res_model">wc_recruitment_daily.report</field>
+<field name="view_mode">tree,pivot</field>
+</record> -->
+
+
+<!-- <record id="rdt_report_tree" model="ir.ui.view">
+  <field name="name">tree</field>
+  <field name="model">wc_recruitment_daily.report</field>
+  <field name="arch" type="xml">
+  <tree string="tree View">
+  <field name="x_create_date" />
+  <field name="x_job_code" />
+  <field name="x_applicant_name" />
+  <field name="x_phone" />
+  <field name="x_national_id" />
+  <field name="x_nationality" />
+  <field name="x_gender" />
+  <field name="x_age" />
+  <field name="x_governorate" />
+  <field name="x_city_area" />
+  <field name="x_military_status" />
+  <field name="x_graduation_status" />
+  <field name="x_university" />
+  <field name="x_faculty" />
+  <field name="x_social_insurance" />
+  <field name="x_email" />
+  <field name="x_pc_laptop"/>
+  <field name="x_internet_con"/>
+  <field name="x_con_speed"/>
+  <field name="x_internet_provider"/>
+  <field name="x_indebendancy"/>
+  <field name="x_prev_work_experience"/>
+  <field name="x_prev_work_experience_what"/>
+  <field name="x_why_leave"/>
+  <field name="x_why_join"/>
+  <field name="x_salary_expections"/>
+  <field name="x_relational_shifts"/>
+  <field name="x_english_level"/>
+  <field name="x_worked_4_raya"/>
+  <field name="x_ready_work_from_home"/>
+  <field name="x_operating_sys"/>
+  <field name="x_main_source"/>
+  <field name="x_source"/>
+  <field name="x_recruiter"/>
+  <field name="x_hr_interviwe_date"/>
+
+  <field name="x_pronunciation"/>
+  <field name="x_grammer"/>
+  <field name="x_fluency"/>
+  <field name="x_understanding_vocab"/>
+
+  <field name="x_sales_experience"/>
+  <field name="x_years_of_experience"/>
+
+
+  <field name="x_first_interview_feedback"/>
+  <field name="x_interview_feedback_reason"/>
+  <field name="x_sector"/>
+  <field name="x_project"/>
+  <field name="x_second_interview_feedback"/>
+  <field name="x_second_interview_feedback_reason"/>
+  <field name="x_english_test_result"/>
+
+
+
+  <field name="x_typing_test_result"/>
+  <field name="x_job_offer_feedback"/>
+  <field name="x_date_of_signing"/>
+  <field name="x_job_offer_feedback_reason"/>
+  <field name="x_hired"/>
+  <field name="x_date_of_hiring"/>
+  <field name="x_reason_if_not_hired"/>
+  <field name="x_sector_projects_type"/>
+  </tree>
+  </field>
+</record> -->
+
+
+<!-- <record id="rdt_report_main_source_pivot" model="ir.ui.view">
+<field name="name">RDT Per Main Source</field>
+<field name="model">wc_recruitment_daily.report</field>
+<field name="arch" type="xml">
+<pivot string="RDT dropout reason">
+  <field name="x_first_interview_feedback" type="col"/>
+  <field name="x_second_interview_feedback" type="col"/>
+<field name="x_main_source" type="row"/>
+</pivot>
+</field>
+</record> -->
+
+    <!-- <record id="action_rdt_report_main_source" model="ir.actions.act_window">
+    <field name="name">RDT Per Main Source</field>
+    <field name="res_model">wc_recruitment_daily.report</field>
+    <field name="view_mode">pivot</field>
+    <field name="view_id" ref="rdt_report_main_source_pivot"/>
+    </record> -->
+
+
+<menuitem name="RDT Reports" id="menu_report_rdt" parent="hr_recruitment.report_hr_recruitment" sequence="51"/>
+
+<!-- <menuitem name="RDT raw data" id="menu_report_rdt_raw" parent="menu_report_rdt"
+    sequence="52" action="action_rdt_report" groups=""/> -->
+
+<!-- <menuitem name="RDT per Main Source" id="menu_report_rdt_source" parent="menu_report_rdt"
+sequence="53" action="action_rdt_report_main_source" groups=""/> -->
+
+  </data>
+</odoo>

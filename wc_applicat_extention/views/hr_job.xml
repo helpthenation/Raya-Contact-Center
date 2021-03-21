@@ -1,0 +1,64 @@
+<?xml version="1.0" ?>
+<!-- Copyright 2018-2019 ForgeFlow, S.L.x
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0) -->
+<odoo>
+  <data>
+
+        <!-- <record id="hr_applicant_form_view_inherit" model="ir.ui.view">
+        <field name="name">hr.applicant.form.hrr.inherit</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type_id']" position="after">
+                        <field name="hr_interviwe_date" />
+                        <field name="technical_interviwe_date" />
+                        <field name="create_date" />
+            </xpath>
+        </field>
+    </record> -->
+    <record id="hr_applicant_kanban_view_inherit" model="ir.ui.view">
+            <field name="name">hr.job.kanban.hrr.inherit</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr_recruitment.view_hr_job_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="prooject" />
+                </xpath>
+                <xpath expr="//kanban/templates/t/div/div/div/div"  position="after">
+                   <div class="o_primary col-12">
+                        <span><t t-esc="record.prooject.value"/></span>
+                    </div>
+                </xpath>
+            </field>
+    </record>
+    <record id="view_hr_job_tree_inherit" model="ir.ui.view">
+            <field name="name">hr.job.tree.hrr.inherit</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_hr_job_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="prooject" />
+                </xpath>
+            </field>
+    </record>
+
+    <record id="hr_contract_form_prooject" model="ir.ui.view">
+        <field name="name">hr.job.form.prooject.inherit</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div[@class='oe_title']" position="inside">
+              <group attrs="{'invisible':[('job_category','=','talent')]}">
+                <group>
+                  <div class="o_row">
+                      <label for="prooject" class="oe_edit_only"/>
+                      <h3><field name="prooject"/></h3>
+                  </div>
+                </group>
+              </group>
+            </xpath>
+        </field>
+    </record>
+  </data>
+
+</odoo>

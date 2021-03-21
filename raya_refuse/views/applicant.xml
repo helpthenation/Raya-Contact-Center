@@ -1,0 +1,87 @@
+<odoo>
+  <data>
+      <record id="raya_refuse_form_refuse_reason" model="ir.ui.view">
+          <field name="name">raya.refuse.form.refuse.reason</field>
+          <field name="model">applicant.get.refuse.reason</field>
+          <field name="inherit_id" ref="hr_recruitment.applicant_get_refuse_reason_view_form"/>
+          <field name="arch" type="xml">
+
+              <xpath expr="//field[@name='refuse_reason_id']" position="replace">
+                <field name="refuse_reason_id" attrs="{'invisible':[('job_category','=','talent')], 'required':[('job_category','!=','talent')]}"/>
+                <field name="note" attrs="{'invisible':[('job_category','=','talent')]}"/>
+              </xpath>
+              <xpath expr="//field[@name='refuse_reason_id']" position="before">
+                <field name="reason_type" attrs="{'invisible':[('job_category','!=','talent')], 'required':[('job_category','=','talent')]}"/>
+                <field name="applicant_reason_id" attrs="{'invisible':[('job_category','!=','talent')], 'required':[('job_category','=','talent')]}"/>
+                <field name="note" attrs="{'invisible':[('job_category','!=','talent')]}"/>
+                <field name="job_category" invisible="1"/>
+              </xpath>
+
+          </field>
+      </record>
+
+      <record model="ir.ui.view" id="raya_refuses_list_refuse_reason_all">
+        <field name="name">Refuse Reasons</field>
+        <field name="model">reason.refuse</field>
+        <field name="arch" type="xml">
+          <tree>
+            <field name="name"/>
+            <field name="reason_type"/>
+          </tree>
+        </field>
+      </record>
+
+      <record model="ir.ui.view" id="raya_refuses_form_refuse_reason_all">
+          <field name="name">Refuse Reasons</field>
+          <field name="model">reason.refuse</field>
+          <field name="arch" type="xml">
+              <form string="Refuse Reasons">
+                <sheet>
+                  <group>
+                    <group>
+                      <field name="name"/>
+                      <field name="reason_type"/>
+                      <field name="quality" groups='wc_raya_quality.system_hr_recruitment_quality_team' />
+                    </group>
+                  </group>
+                </sheet>
+              </form>
+          </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="raya_refuses_action_window_refuse_reason_all">
+          <field name="name">Refuse Reasons</field>
+          <field name="res_model">reason.refuse</field>
+          <field name="view_mode">tree,form</field>
+          <field name="context"></field>
+          <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to start add new refuse type.
+              </p>
+          </field>
+      </record>
+      <menuitem name="Refuse Reasons Types" id="reason_refuse_menu_parent" parent="hr_recruitment.menu_hr_recruitment_configuration"/>
+      <menuitem name="Refuse Reasons" id="reason_refuse_menu" parent="reason_refuse_menu_parent"
+        action="raya_refuses_action_window_refuse_reason_all"/>
+
+
+      <record id="view_hr_applicant_form" model="ir.ui.view">
+  			<field name="name">view.hr.applicant.form</field>
+  			<field name="model">hr.applicant</field>
+  			<field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form" />
+  			<field name="arch" type="xml">
+          <xpath expr="//field[@name='refuse_reason_id']" position="replace">
+            <field name="refuse_reason_id"   attrs="{'invisible': ['|',('active', '=', True),('job_category', '=', 'talent')]}"/>
+          </xpath>
+  				<xpath expr="//field[@name='refuse_reason_id']" position="after">
+    				<field name="operational_refuse_note"   attrs="{'invisible': ['|',('active', '=', True),('job_category', '=', 'talent')]}"/>
+            <field name="talent_refuse_reason_type" attrs="{'invisible': ['|',('active', '=', True),('job_category', '!=', 'talent')]}"/>
+            <field name="talent_refuse_reason_id" attrs="{'invisible': ['|',('active', '=', True),('job_category', '!=', 'talent')]}"/>
+            <field name="talent_refuse_note" attrs="{'invisible': ['|',('active', '=', True),('job_category', '!=', 'talent')]}"/>
+                 <!-- <field name="quality" groups='wc_raya_quality.system_hr_recruitment_quality_team' /> -->
+  				</xpath>
+				</field>
+  		</record>
+
+  </data>
+</odoo>

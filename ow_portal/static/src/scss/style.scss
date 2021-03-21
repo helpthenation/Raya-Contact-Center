@@ -1,0 +1,90 @@
+/* Hack for custom themes */
+.o_portal_docs.list-group.ow_portal {
+    width: 100%;
+    display: inline-block;
+}
+
+
+.ow_portal {
+	width: 100%;
+	display: inline-block;
+	
+	.badge-pill {
+		font-size: 32px;
+	}
+	
+    .badge-secondary {
+        background-color: transparent;
+    }
+	
+	.list-group-item {
+	        float: left;
+		    margin: 10px;
+		    padding: 14px 18px;
+		    min-height: 130px;
+            width: 30%;
+            border-radius: 0px;
+		    font-size: 20px;
+		    
+            @media (max-width: 767px) {
+                width: 100%;
+            }
+	}
+	
+	[href="/my/skills"] {
+		background-color: theme-color('primary');
+		color: #fff !important;
+	}
+
+	[href="/my/tec_skills"]{
+		background-color: theme-color('secondary');
+		color: #fff !important;
+	}
+	
+    [href="/my/lang_skills"]{
+		background-color: theme-color('primary');
+		color: #fff !important;
+	}
+
+	[href="/my/langskills"] {
+		background-color: theme-color('delta');
+		 color: #fff !important;
+	}
+
+	[href="/my/projects"] {
+		background-color: theme-color('epsilon');
+		color: #fff !important;
+	}
+
+	[href="/my/tasks"] {
+		background-color: theme-color('gamma');
+        color: #fff !important;
+	}
+    
+    [href="/my/entry"]{
+		//background-image: url("/ow_portal/static/back01.jpg");
+        background-color: #dc3545;
+		//background-size: contain;
+		color: #fff !important;
+        border: 2px solid #1e2432;
+        border-radius: 25px;
+	}
+    
+	[href="/my/g6"]{
+		//background-image: url("/ow_portal/static/back01.jpg");
+        background-color: theme-color('secondary');
+		//background-size: contain;
+		color: #fff !important;
+        border: 2px solid #1e2432;
+        border-radius: 25px;
+	}
+    
+    [href="/my/online"]{
+        //background-image: url("/ow_portal/static/back01.jpg");
+        background-color: theme-color('primary');
+		//background-size: contain;
+		color: #fff !important;
+        border: 2px solid #1e2432;
+        border-radius: 25px;
+	}
+}

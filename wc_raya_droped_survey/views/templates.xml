@@ -1,0 +1,39 @@
+<odoo>
+    <data>
+<record id="mail_template_user_input_invite" model="mail.template">
+            <field name="name">Dropped Survey: Test</field>
+            <field name="model_id" ref="wc_raya_droped_survey.model_survey_user_input" />
+            <field name="subject">Participate to ${object.survey_id.title} survey</field>
+            <field name="email_to"></field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-size: 13px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Dear ${object.partner_id.name or 'participant'}<br/><br/>
+        % if object.survey_id.certification:
+            You have been invited to take a new certification.
+        % else:
+            We are conducting a survey and your response would be appreciated.
+        % endif
+        <div style="margin: 16px 0px 16px 0px;">
+            <a href="${(object.get_dropped_survey_start_url()) | safe}"
+                style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                % if object.survey_id.certification:
+                    Start Certification
+                % else:
+                    Start Survey
+                % endif
+            </a>
+        </div>
+        % if object.deadline:
+            Please answer the survey for ${format_date(object.deadline)}.<br/><br/>
+        % endif
+        Thank you for your participation.
+    </p>
+</div>
+            </field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+    </data>  
+</odoo>

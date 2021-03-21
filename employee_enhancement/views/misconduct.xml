@@ -1,0 +1,64 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="employee_misconduct_list">
+      <field name="name">Misconduct</field>
+      <field name="model">employee.misconduct</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="applying_restriction"/>
+          <field name="description"/>
+        </tree>
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="employee_misconduct_form">
+        <field name="name">Misconduct</field>
+        <field name="model">employee.misconduct</field>
+        <field name="arch" type="xml">
+            <form string="Misconduct">
+              <sheet>
+                <group>
+                  <group>
+                    <field name="name"/>
+                  </group>
+                  <group>
+                    <div class="o_row">
+                        <label for="applying_restriction"/>:
+                        <field name="applying_restriction"/>
+                        <span> Month/s</span>
+                    </div>
+                  </group>
+                </group>
+                <group>
+                  <field name="description"/>
+                </group>
+              </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="employee_misconduct_action_window">
+      <field name="name">Misconduct</field>
+      <field name="res_model">employee.misconduct</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context"></field>
+      <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+          Click to start add new Last Head Count.
+        </p>
+      </field>
+    </record>
+
+    <!-- menu categories -->
+    <menuitem name="Misconduct" id="employee_misconduct_menu" parent="hr.menu_human_resources_configuration"
+      action="employee_misconduct_action_window"
+      groups="employee_enhancement.group_misconduct_officer"/>
+
+  </data>
+</odoo>

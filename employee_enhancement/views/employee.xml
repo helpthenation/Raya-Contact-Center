@@ -1,0 +1,129 @@
+<odoo>
+  <data>
+
+
+    <!-- <record id="employee_enhancement_job_view_form" model="ir.ui.view">
+        <field name="name">employee_enhancement_job_view_form</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+
+          <field name="no_of_recruitment" position="after">
+            <field name="employee_grade"/>
+          </field>
+          <xpath expr="//page[1]/div[1]" position="after">
+          				<group>
+          					<field name="job_category"/>
+          				</group>
+          			</xpath>
+        </field>
+    </record> -->
+
+    <!-- <record id="view_hr_job_form_employee_enhancement" model="ir.ui.view">
+      <field name="name">hr.job.form.employee.enhancement</field>
+      <field name="model">hr.job</field>
+      <field name="inherit_id" ref="hr.view_hr_job_form" />
+      <field name="arch" type="xml">
+
+        <xpath expr="//field[@name='no_of_recruitment']" position="after">
+          <field name="employee_grade" />
+        </xpath>
+        <xpath expr="//page[2]/group/group[@name='recruitment']" position="inside">
+                <field name="employee_grade"/>
+        </xpath>
+
+
+
+      </field>
+      </record> -->
+
+      <record id="hr_employee_form_employee_enhancement" model="ir.ui.view">
+          <field name="name">hr.employee.form.enhancement.inherit</field>
+          <field name="model">hr.employee</field>
+          <field name="inherit_id" ref="hr.view_employee_form"/>
+          <field name="arch" type="xml">
+              <xpath expr="//field[@name='job_id']" position="after">
+                <field name="employee_grade"/>
+              </xpath>
+              <xpath expr="//page[@name='hr_settings']" position="after">
+                <page string="Head Count Dates" name="head_count_dates" groups="employee_enhancement.group_head_count_user">
+                  <group>
+                    <field name="head_count_dates_ids" nolabel="1" editable="bottom">
+                      <tree>
+                          <field name="date"/>
+                          <field name="head_count_id"/>
+                          <field name="description"/>
+                      </tree>
+                      <form>
+                        <group>
+                          <group>
+                            <field name="date"/>
+                            <field name="head_count_id"/>
+                          </group>
+                          <group>
+                            <field name="description"/>
+                          </group>
+
+                        </group>
+                      </form>
+                    </field>
+                  </group>
+                </page>
+              </xpath>
+
+              <xpath expr="//page[@name='hr_settings']" position="after">
+                <page string="Misconducts" name="misconducts" groups="employee_enhancement.group_misconduct_officer">
+                  <group>
+                    <field name="misconduct_ids" nolabel="1" editable="bottom">
+                      <tree>
+                          <field name="date"/>
+                          <field name="misconduct_type_id"/>
+                          <field name="description"/>
+                      </tree>
+                      <form>
+                        <group>
+                          <group>
+                            <field name="date"/>
+                            <field name="misconduct_type_id"/>
+                          </group>
+                          <group>
+                            <field name="description"/>
+                          </group>
+
+                        </group>
+                      </form>
+                    </field>
+                  </group>
+                </page>
+              </xpath>
+
+          </field>
+      </record>
+
+      <record id="hr_contract_form_employee_enhancement" model="ir.ui.view">
+          <field name="name">hr.job.form.employee.enhancement.inherit</field>
+          <field name="model">hr.job</field>
+          <field name="inherit_id" ref="hr.view_hr_job_form"/>
+          <field name="arch" type="xml">
+
+              <xpath expr="//field[@name='no_of_recruitment']" position="before">
+                <field name="job_category" />
+                <field name="employee_grade"  attrs="{'required':[('job_category', '!=' ,False)]}"/>
+                <div class="o_row">
+                    <label for="head_count_restriction"/>:
+                    <field name="head_count_restriction"/>
+                    <span> Month/s</span>
+                </div>
+              </xpath>
+              <!-- <xpath expr="//sheet/div[@class='oe_title']" position="after">
+                <group>
+                  <group>
+
+                  </group>
+                </group>
+
+              </xpath> -->
+          </field>
+      </record>
+  </data>
+</odoo>

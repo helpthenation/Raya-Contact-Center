@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+
+  <record model="ir.module.category" id="system_recruitment_team">
+      <field name="name">Recruitment Team</field>
+      <field name="sequence">1</field>
+  </record>
+  <record id="system_recruitment_team_talent" model="res.groups">
+    <field name="name">Recruitment Talent Acquisition</field>
+    <field name="category_id" ref="system_recruitment_team"/>
+  </record>
+  <record id="system_recruitment_team_operational" model="res.groups">
+    <field name="name">Recruitment Operational</field>
+    <field name="category_id" ref="system_recruitment_team"/>
+  </record>
+  <record id="system_recruitment_team_both" model="res.groups">
+    <field name="name">Recruitment Both Categories</field>
+    <field name="category_id" ref="system_recruitment_team"/>
+  </record>
+
+
+  <record id="system_recruitment_both_restriction_job" model="ir.rule">
+    <field name="name">Remove Restriction Both</field>
+    <field ref="hr_recruitment.model_hr_job" name="model_id"/>
+    <field name="domain_force">[]</field>
+    <field name="groups" eval="[(4, ref('wc_ta_extention.system_recruitment_team_both'))]"/>
+  </record>
+  <record id="system_recruitment_both_restriction" model="ir.rule">
+    <field name="name">Remove Restriction Both</field>
+    <field ref="hr_recruitment.model_hr_recruitment_stage" name="model_id"/>
+    <field name="domain_force">[]</field>
+    <field name="groups" eval="[(4, ref('wc_ta_extention.system_recruitment_team_both'))]"/>
+  </record>
+  <record id="request_both_restriction_request" model="ir.rule">
+    <field name="name">Remove Operational Restriction</field>
+    <field ref="wc_hiring_request.model_hiring_request" name="model_id"/>
+    <field name="domain_force"> [] </field>
+    <field name="groups" eval="[(4, ref('wc_ta_extention.system_recruitment_team_both'))]"/>
+  </record>
+<record id="stage_talent_restriction" model="ir.rule">
+  <field name="name">Stage Talent Restriction</field>
+  <field ref="hr_recruitment.model_hr_recruitment_stage" name="model_id"/>
+  <field name="domain_force"> [('job_category', '=', 'talent')] </field>
+  <field name="groups" eval="[(4, ref('wc_ta_extention.system_recruitment_team_talent'))]"/>
+</record>
+<record id="stage_operational_restriction" model="ir.rule">
+  <field name="name">Stage Operational Restriction</field>
+  <field ref="hr_recruitment.model_hr_recruitment_stage" name="model_id"/>
+  <field name="domain_force"> [('job_category', '=', 'operational')] </field>
+  <field name="groups" eval="[(4, ref('wc_ta_extention.system_recruitment_team_operational'))]"/>
+</record>
+<record id="request_talent_restriction" model="ir.rule">
+  <field name="name">Request Talent Restriction</field>
+  <field ref="wc_hiring_request.model_hiring_request" name="model_id"/>
+  <field name="domain_force"> [('category', '=', 'Talent Acq')] </field>
+  <field name="groups" eval="[(4, ref('wc_ta_extention.system_recruitment_team_talent'))]"/>
+</record>
+<record id="request_operational_restriction" model="ir.rule">
+  <field name="name">Request Operational Restriction</field>
+  <field ref="wc_hiring_request.model_hiring_request" name="model_id"/>
+  <field name="domain_force"> [('category', '=', 'operational')] </field>
+  <field name="groups" eval="[(4, ref('wc_ta_extention.system_recruitment_team_operational'))]"/>
+</record>
+<record id="position_talent_restriction" model="ir.rule">
+  <field name="name">Position Talent Restriction</field>
+  <field ref="hr_recruitment.model_hr_job" name="model_id"/>
+  <field name="domain_force"> [('job_category', '=', 'talent')] </field>
+  <field name="groups" eval="[(4, ref('wc_ta_extention.system_recruitment_team_talent'))]"/>
+</record>
+<record id="position_operational_restriction" model="ir.rule">
+  <field name="name">Position Operational Restriction</field>
+  <field ref="hr_recruitment.model_hr_job" name="model_id"/>
+  <field name="domain_force"> [('job_category', '=', 'operational')] </field>
+  <field name="groups" eval="[(4, ref('wc_ta_extention.system_recruitment_team_operational'))]"/>
+</record>
+
+
+</odoo>

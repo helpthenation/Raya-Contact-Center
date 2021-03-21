@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wc_raya_updates2_applicant_religion,wc_raya_updates2.applicant_religion,model_applicant_religion,base.group_user,1,1,1,1
+access_wc_raya_qoh_tower,wc_raya_qoh.tower,model_wc_raya_qoh_tower,base.group_user,1,1,1,1

@@ -1,0 +1,305 @@
+<odoo>
+  <data>
+
+<record id="view_hr_applicant_feed_form" model="ir.ui.view">
+			<field name="name">view.hr.applicant.form</field>
+			<field name="model">hr.applicant</field>
+			<field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form" />
+			<field name="arch" type="xml">
+      <field name="emp_id" position="replace"></field>
+      <field name="manager" position="replace"></field>
+      <field name="applicant_quartile_type" position="replace"></field>
+      <field name="type_id" position="after">
+        <field name="black_listed" invisible="1"/>
+        <field name="emp_id" string="Employee" force_save="1" readonly="1" attrs="{'invisible':[('emp_id','=',False)]}"/>
+        <field name="hr_id" force_save="1" attrs="{'invisible':[('emp_id','=',False),('is_final','!=',True)],'required':[('emp_id','=',False),('is_final','=',True)],'readonly':[('emp_id','!=',False)]}"/>
+        <field name="manager" string="Manager" force_save="1" readonly="1" attrs="{'invisible':[('emp_id','=',False)]}"/>
+        <field name="applicant_quartile_type" string="Employee Skill Quartile" force_save="1" readonly="1" attrs="{'invisible':[('emp_id','=',False)]}"/>
+        <field name="screening_check" invisible="1"/>
+        <field name="interview_check" invisible="1"/>
+        <field name="emp_project" attrs="{'invisible':[('emp_id','=',False)]}"/>
+      </field>
+      <button name="compute_level" position="attributes">
+        <attribute name="attrs">{'invisible':['|','|',('black_listed','=',True),('active','=',False),('is_final','=',True)]}</attribute>
+      </button>
+      <button name="archive_applicant" position="attributes">
+        <attribute name="attrs">{'invisible':['|',('active','=',False),('is_final','=',True)]}</attribute>
+      </button>
+      <field name="name" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="partner_name" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="national_id" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="email_from" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="email_cc" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="partner_phone" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="partner_mobile" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="type_id" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="categ_ids" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="user_id" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="priority" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="medium_id" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="ref_user_id" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="accept_pipeline" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="full_name_arabic" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)],'invisible':[('job_category','=','talent')]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="date_of_birth" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="age" position="attributes">
+        <!-- <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute> -->
+        <attribute name="force_save">1</attribute>
+        <attribute name="readonly">1</attribute>
+      </field>
+      <field name="age" position="before">
+        <field name="age_calculated" invisible="1"/>
+      </field>
+      <field name="gender" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="state" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="nationality" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="military_status" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="job_id" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="hiring_request" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)],'invisible':[('job_id','=',False)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="salary_expected" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="salary_proposed" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="salary_expected_extra" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="salary_proposed_extra" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="availability" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="description" position="replace">
+        <field name="description" placeholder="Feedback of interviews..." attrs="{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}" force_save="1"/>
+      </field>
+      <field name="interview_checklist" position="attributes">
+        <attribute name="attrs">{'readonly':['|','|',('black_listed','=',True),('is_final','=',True),('interview_checklist_checkbox','!=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="question" position="attributes">
+        <!-- <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute> -->
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="excel_line_ids" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="education_ids" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="certification_ids" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="profession_ids" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="language_level_talent_ids" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="techskill_talent_ids" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      <field name="nontechskill_talent_ids" position="attributes">
+        <attribute name="attrs">{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+
+
+
+
+
+      <xpath expr="//button[@name='transfer_applicant']" position="attributes">
+     <attribute name="attrs">{'invisible':[('job_category', '=', 'talent')]}</attribute>
+      </xpath>
+<xpath expr="//button[@name='create_employee_from_applicant']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|',('is_final', '!=', True),('emp_id','!=',False),('hr_id','=',False)]}</attribute>
+      </xpath>
+      <field name="department_id" position="attributes">
+        <attribute name="readonly">1</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+
+<xpath expr="//page[@name='hr_skills']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|',('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False),('job_category','=','talent')]}</attribute>
+</xpath>
+<xpath expr="//page[@name='tech_skills']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|',('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False),('job_category','=','talent')]}</attribute>
+</xpath>
+<xpath expr="//page[@name='lang_level_pg']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|',('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False),('job_category','=','talent')]}</attribute>
+</xpath>
+<xpath expr="//page[@name='hr_skills_talent']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|',('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False),('job_category','!=','talent')]}</attribute>
+</xpath>
+<xpath expr="//page[@name='tech_skills_talent']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|',('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False),('job_category','!=','talent')]}</attribute>
+</xpath>
+<xpath expr="//page[@name='lang_level_talent']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|',('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False),('job_category','!=','talent')]}</attribute>
+</xpath>
+<xpath expr="//page[@name='survey']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|',('job_category','!=','operational'),('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False)]}</attribute>
+</xpath>
+<xpath expr="//page[@name='hr_qualification']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|',('job_category','=','talent'),('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False)]}</attribute>
+</xpath>
+<xpath expr="//page[@name='application_summary']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|',('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False)]}</attribute>
+</xpath>
+<xpath expr="//page[@name='test_results']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|',('job_category','!=','operational'),('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False)]}</attribute>
+</xpath>
+<xpath expr="//page[@name='trainee_status']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|',('job_category','!=','operational'),('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False)]}</attribute>
+</xpath>
+
+<xpath expr="//page[@name='feedback']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|',('job_category','!=','operational'),('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False)]}</attribute>
+</xpath>
+<xpath expr="//page[@name='ta_employee_transfer']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|',('emp_id','=',False),('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False)]}</attribute>
+</xpath>
+<xpath expr="//page[@name='interview_checklist_page']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|','|','|',('is_initial','=',True),('interview_check','!=',True),('interview_checklist_checkbox','!=',True),('quality_hold','=',True),('stage_id','=',False),('job_category','!=','talent')]}</attribute>
+</xpath>
+<xpath expr="//notebook/page[15]" position="attributes">
+     <!-- <attribute name="attrs">{'invisible':['|','|','|','|',('job_id','=',False),('interview_checklist_checkbox','!=',True),('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False)]}</attribute> -->
+</xpath>
+<xpath expr="//page[@name='screening_monitor']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|','|',('screening_check','!=',True),('job_id','=',False),('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False)]}</attribute>
+</xpath>
+<xpath expr="//page[@name='excel_test']" position="attributes">
+     <attribute name="attrs">{'invisible':['|','|','|','|',('job_category','!=','talent'),('excel_check','=',False),('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False)]}</attribute>
+</xpath>
+<!-- Interview Feedback -->
+      <xpath expr="//notebook" position="inside">
+          <page name="interview_feedback" string="Interview Feedback" attrs="{'invisible':['|','|','|',('job_category', '!=', 'talent'),('quality_hold','=',True),('is_initial','=',True),('stage_id','=',False)]}">
+            <group>
+            <group>
+            <field name="accepted_first_interview" string="Accepted First Interview" attrs="{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}" force_save="1"/>
+            <field name="accepted_second_interview" string="Accepted Second Interview" attrs="{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}" force_save="1"/>
+            <field name="accepted_client_interview" string="Accepted Client Interview" attrs="{'readonly':['|',('black_listed','=',True),('is_final','=',True)]}" force_save="1"/>
+            </group>
+            <group>
+            <field name="accepted_first_interview_reason" string="Acceptance Reason" attrs="{'invisible':[('accepted_first_interview', '!=', True)],'readonly':['|',('black_listed','=',True),('is_final','=',True)]}" force_save="1"/>
+            <field name="accepted_second_interview_reason" string="Acceptance Reason" attrs="{'invisible':[('accepted_second_interview', '!=', True)],'readonly':['|',('black_listed','=',True),('is_final','=',True)]}" force_save="1"/>
+            <field name="accepted_client_interview_reason" string="Acceptance Reason" attrs="{'invisible':[('accepted_client_interview', '!=', True)],'readonly':['|',('black_listed','=',True),('is_final','=',True)]}" force_save="1"/>
+            </group>
+            </group>
+          </page>
+          </xpath>
+          </field>
+          </record>
+
+<!-- config menu -->
+
+<record model="ir.ui.view" id="acceptance_reason_form_view">
+     <field name="name">acceptance.reason.form</field>
+     <field name="model">interview_feedback</field>
+     <field name="arch" type="xml">
+         <form string="Acceptance Reason">
+           <sheet>
+
+               <group>
+               <field name="name" placeholder="Acceptance Reason" required="True"/>
+               </group>
+           </sheet>
+         </form>
+     </field>
+     </record>
+     <record model="ir.ui.view" id="acceptance_reason_tree_view">
+     <field name="name">acceptance.reason.tree</field>
+     <field name="model">interview_feedback</field>
+     <field name="arch" type="xml">
+         <tree string="Acceptance Reason">
+                  <field name="name" string="Reason"/>
+         </tree>
+     </field>
+     </record>
+<record model="ir.actions.act_window" id="acceptance_reason">
+      <field name="name">Acceptance Reason</field>
+      <field name="res_model">interview_feedback</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Acceptance Reason" id="acceptance_reason_menu" parent="hr_recruitment.menu_hr_recruitment_configuration"
+              action="acceptance_reason" groups="hr_recruitment.group_hr_recruitment_user"/>
+  </data>
+</odoo>

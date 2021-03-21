@@ -1,0 +1,81 @@
+<odoo>
+  <data>
+    <record id="system_recruitment_engagement_team" model="res.groups">
+      <field name="name">Engagement Team</field>
+      <field name="category_id" ref="wc_ta_extention.system_recruitment_team"/>
+    </record>
+    <record id="hr_applicant_view_formmmm" model="ir.ui.view">
+                <field name="name">hr.applicant.form</field>
+                <field name="model">hr.applicant</field>
+                <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+                <field name="arch" type="xml">
+                  <xpath expr="//header" position="inside">
+                    <button name="conf_blacklist" type="object" class="btn btn-warning" string="Blacklist" attrs="{'invisible':['|','|',('job_category','!=','talent'),('black_listed','=',True),('is_final','=',True)]}"/>
+                    <button name="conf_un_blacklist" type="object" class="btn btn-success" string="Unblacklist"  attrs="{'invisible':['|',('job_category','!=','talent'),('black_listed','!=',True)]}" groups="jt_update_profiles.system_recruitment_engagement_team"/>
+                  </xpath>
+
+                 <xpath expr="//field[@name='partner_id']" position="after">
+                            <field name="response_apply_id" readonly="1" force_save="1"/>
+                            <field name="black_listed" readonly="1" />
+                </xpath>
+                </field>
+        </record>
+        <record id="hr_applicant_view_search" model="ir.ui.view">
+                    <field name="name">hr.applicant.search</field>
+                    <field name="model">hr.applicant</field>
+                    <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_search_bis"/>
+                    <field name="arch" type="xml">
+                      <field name="partner_name" position="after">
+                        <filter string="Blacklisted" name="blacklisted" domain="[('black_listed', '=', True)]"/>
+                        <filter string="Quality Hold" name="quality_hold" domain="[('quality_hold', '=', True)]"/>
+                      </field>
+                    </field>
+            </record>
+            <record id="partner_id_view_search" model="ir.ui.view">
+                        <field name="name">res.partner.search</field>
+                        <field name="model">res.partner</field>
+                        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+                        <field name="arch" type="xml">
+                          <field name="name" position="after">
+                            <filter string="Blacklisted" name="blacklisted" domain="[('blacklisted', '=', True)]"/>
+                          </field>
+                        </field>
+                </record>
+    <record id="hr_applicant_blacklisted_view_form" model="ir.ui.view">
+                <field name="name">res.partner.form.ext</field>
+                <field name="model">res.partner</field>
+                <field name="inherit_id" ref="base.view_partner_form"/>
+                <field name="arch" type="xml">
+                  <!-- <xpath expr="//sheet" position="before">
+                    <header>
+                      <button name="un_block_user" type="object" string="Un Blacklisting" attrs="{'invisible':[('blacklisted','!=',True)]}" class="oe_highlight" />
+                      <button name="block_user" type="object" string="Blacklisting" attrs="{'invisible':[('blacklisted','=',True)]}"  class="oe_highlight" />
+                    </header>
+                  </xpath> -->
+                  <xpath expr="//field[@name='type']" position="before">
+                      <field name="blacklisted" readonly="1" force_save="1" invisible="0"/>
+                  </xpath>
+                  <xpath expr="//field[@name='vat']" position="after">
+                    <field name="dob" attrs="{'invisible':[('company_type','!=','person')]}"/>
+                    <field name="gender" attrs="{'invisible':[('company_type','!=','person')]}"/>
+                    <field name="military_status" attrs="{'invisible':[('company_type','!=','person')]}"/>
+                  </xpath>
+                </field>
+        </record>
+    <record id="view_hr_employee_form" model="ir.ui.view">
+		<field name="name">view.hr.job.form</field>
+		<field name="model">hr.job</field>
+		<field name="inherit_id" ref="hr.view_hr_job_form"/>
+                <field name="arch" type="xml">
+                    <xpath expr="//field[@name='user_id']" position="before">
+                <label for="apply_survey_id" groups="survey.group_survey_user"/>
+                <div groups="survey.group_survey_user" class="o_row">
+                    <field name="apply_survey_id" context="{'default_access_mode': 'token'}"/>
+                    <button string="Display Apply Form" name="action_print_survey" type="object" attrs="{'invisible':[('apply_survey_id','=',False)]}" class="oe_link"/>
+                </div>
+
+                      </xpath>
+                </field>
+        </record>
+  </data>
+</odoo>

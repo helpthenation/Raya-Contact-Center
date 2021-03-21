@@ -1,0 +1,108 @@
+<odoo>
+  <data>
+  <!-- HR Applicant override -->
+  <record id="view_hr_applicant_religion_form" model="ir.ui.view">
+			<field name="name">view.hr.applicant.form</field>
+			<field name="model">hr.applicant</field>
+			<field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form" />
+			<field name="arch" type="xml">
+      <xpath expr="//field[@name='gender']" position="after">
+        <field name="religion"/>
+      </xpath>
+          </field>
+          </record>
+
+    <!-- HR Recruitment Config -->
+<record model="ir.actions.act_window" id="religion_info">
+      <field name="name">Religion</field>
+      <field name="res_model">applicant_religion</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="religion_info_tree_view">
+     <field name="name">Religion</field>
+     <field name="model">applicant_religion</field>
+     <field name="arch" type="xml">
+         <tree string="Religion">
+                  <field name="name" />
+         </tree>
+     </field>
+     </record>
+     <record model="ir.ui.view" id="religion_info_form_view">
+     <field name="name">Religion</field>
+     <field name="model">applicant_religion</field>
+     <field name="arch" type="xml">
+         <form string="Religion">
+           <sheet>
+               <group>
+                 <field name="name"/>
+               </group>
+           </sheet>
+         </form>
+     </field>
+     </record>
+
+    <!-- Top menu item -->
+<menuitem name="Religion" id="religion_menu" parent="hr_recruitment.menu_hr_recruitment_configuration"
+              action="religion_info" />
+
+
+              <!-- Tower view -->
+                
+  <!-- Hirring request override -->
+  <record id="view_hiring_request_tower_form" model="ir.ui.view">
+			<field name="name">view.hiring.request.form</field>
+			<field name="model">hiring.request</field>
+			<field name="inherit_id" ref="wc_hiring_request.view_hiring_request_form" />
+			<field name="arch" type="xml">
+      <xpath expr="//field[@name='working_location']" position="after">
+        <field name="tower"/>
+      </xpath>
+          </field>
+          </record>
+  <!-- HR applicant override -->
+  <record id="view_hr_applicant_tower_form" model="ir.ui.view">
+			<field name="name">view.hr.applicant.form</field>
+			<field name="model">hr.applicant</field>
+			<field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form" />
+			<field name="arch" type="xml">
+      <xpath expr="//field[@name='project']" position="after">
+        <field name="tower"/>
+      </xpath>
+          </field>
+          </record>
+
+  <!-- Tower recruitment configurations -->
+   <record model="ir.actions.act_window" id="tower_info">
+      <field name="name">Tower</field>
+      <field name="res_model">wc_raya_qoh.tower</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="tower_info_tree_view">
+     <field name="name">Tower</field>
+     <field name="model">wc_raya_qoh.tower</field>
+     <field name="arch" type="xml">
+         <tree string="Tower">
+                  <field name="name" />
+         </tree>
+     </field>
+     </record>
+     <record model="ir.ui.view" id="tower_info_form_view">
+     <field name="name">Tower</field>
+     <field name="model">wc_raya_qoh.tower</field>
+     <field name="arch" type="xml">
+         <form string="Tower">
+           <sheet>
+               <group>
+                 <field name="name"/>
+               </group>
+           </sheet>
+         </form>
+     </field>
+     </record>
+     <!--  menu item -->
+<menuitem name="Tower" id="tower_menu" parent="hr_recruitment.menu_hr_recruitment_configuration"
+              action="tower_info" />
+  </data>
+</odoo>

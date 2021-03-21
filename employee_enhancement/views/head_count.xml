@@ -1,0 +1,55 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="head_count_list">
+      <field name="name">Head Count Type</field>
+      <field name="model">head.count</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="description"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="head_count_form">
+        <field name="name">Head Count Type</field>
+        <field name="model">head.count</field>
+        <field name="arch" type="xml">
+            <form string="Head Count Type">
+              <sheet>
+                <group>
+                  <group>
+                    <field name="name"/>
+                  </group>
+                </group>
+                <group>
+                  <field name="description"/>
+                </group>
+              </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="head_count_action_window">
+      <field name="name">Head Count Type</field>
+      <field name="res_model">head.count</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context"></field>
+      <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+          Click to start add new Head Count Type.
+        </p>
+      </field>
+    </record>
+
+    <!-- menu categories -->
+    <menuitem name="Head Count Type" id="head_count_menu" parent="hr.menu_human_resources_configuration"
+      action="head_count_action_window"
+      groups="employee_enhancement.group_head_count_user"/>
+
+  </data>
+</odoo>

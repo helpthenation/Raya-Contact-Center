@@ -1,0 +1,375 @@
+<odoo>
+		<!-- Inherited view of HrApplicant -->
+		<record id="view_hr_applicant_form" model="ir.ui.view">
+			<field name="name">view.hr.applicant.form</field>
+			<field name="model">hr.applicant</field>
+			<field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//group[2]" position="inside">
+					<field name="source_id" />
+					<field name="project" />
+					<field name="full_name_arabic" />
+					<field name="date_of_birth" />
+					<field name="age" />
+					<field name="gender" />
+					<field name="state" />
+					<field name = "nationality"/>
+					<field name="military_status" />
+					<field name="job_category" invisible="1"/>
+					<field name="emp_flag" invisible="1"/>
+				</xpath>
+				<xpath expr="//group[3]" position="inside">
+					<field name="job_code" />
+					<field name="years_of_experience" />
+					<field name="sales_experience" />
+				</xpath>
+				<xpath expr="//form/sheet/group" position="after">
+					<notebook>
+						<page name="hr_skills" string="HR Skills" attrs="{'invisible':[('job_category','=','talent')]}">
+							<separator string="Non Technical Skills" />
+							<field name="nontechskill_ids">
+								<tree editable="Top" delete="false" create="false">
+									<field name="nontech_id" readonly="1" force_save="1"/>
+									<field name="levels" readonly="1" force_save="1" string="Benchmark"/>
+									<!-- attrs="{'column_invisible':[('parent.emp_flag','!=',False)]}" -->
+									<field name ="applicant_level" />
+									<field name ="employee_level" force_save="1" attrs="{'column_invisible':[('parent.emp_flag','=',False)]}"/>
+									<field name ="validation_date" force_save="1" attrs="{'column_invisible':[('parent.emp_flag','=',False)]}"/>
+								</tree>
+								<form>
+									<group col="4">
+										<field name="nontech_id"/>
+										<field name="levels" />
+									</group>
+								</form>
+							</field>
+						</page>
+						<page name="tech_skills" string="Technichal Skills" attrs="{'invisible':[('job_category','=','talent')]}">
+							<separator string="Technical Skills" />
+							<field name="techskill_ids">
+								<tree editable="Top" delete="false" create="false">
+									<field name="tech_id" readonly="1" force_save="1"/>
+									<field name="levels" readonly="1" force_save="1" string="Benchmark"/>
+									 <!-- attrs="{'column_invisible':[('parent.emp_flag','!=',False)]}" -->
+									<field name ="applicant_level"/>
+									<field name ="employee_level" force_save="1" attrs="{'column_invisible':[('parent.emp_flag','=',False)]}"/>
+									<field name ="validation_date" force_save="1" attrs="{'column_invisible':[('parent.emp_flag','=',False)]}"/>
+								</tree>
+								<form>
+									<group col="4">
+										<field name="tech_id"/>
+										<field name="levels" />
+									</group>
+								</form>
+							</field>
+						</page>
+						<page name="lang_level_pg" string="Language Levels" attrs="{'invisible':[('job_category','=','talent')]}">
+							<separator string="Language Skills Level"/>
+							<field name="language_level_ids">
+								<tree editable="top" delete="false" create="false">
+									 <field name="tech_id" string="Language Skills"  readonly="1" force_save="1"/>
+									 <field name ="levels" string="Benchmark"  readonly="1" force_save="1"/>
+									  <!-- attrs="{'column_invisible':[('parent.emp_flag','!=',False)]}" -->
+									 <field name ="applicant_level"/>
+									 <field name ="employee_level" force_save="1" attrs="{'column_invisible':[('parent.emp_flag','=',False)]}"/>
+									 <field name ="validation_date" force_save="1" attrs="{'column_invisible':[('parent.emp_flag','=',False)]}"/>
+
+								</tree>
+							</field>
+						</page>
+
+
+						<!-- talent pages talent pages  talent pages  talent pages  talent pages  -->
+						<page name="hr_skills_talent" string="HR Skills" attrs="{'invisible':[('job_category','!=','talent')]}">
+							<field name="nontech" invisible="1"/>
+							<separator string="Non Technical Skills" />
+							<field name="nontechskill_talent_ids">
+								<tree editable="bottom" delete="false" create="false">
+									<field name="skill_type_id" invisible="1" required="True"/>
+									<field name="skill_id" readonly="1" force_save="1"/>
+									<field name="skill_level_id" readonly="1" force_save="1" string="Benchmark"/>
+									 <!-- attrs="{'column_invisible':[('parent.emp_flag','!=',False)]}" -->
+									<field name ="nontech_applicant_talent_level" string="Applicant Level" domain="[('id','in',nontech_level_domain)]"/>
+									<field name ="nontech_employee_talent_level" force_save="1" string="Employee Level" attrs="{'column_invisible':[('parent.emp_flag','=',False)]}"/>
+									<field name ="nontech_validation_talent_date" force_save="1" string="Validation Date" attrs="{'column_invisible':[('parent.emp_flag','=',False)]}"/>
+									<field name="nontech_level_domain" invisible="1"/>
+
+								</tree>
+							</field>
+						</page>
+						<page name="tech_skills_talent" string="Technichal Skills" attrs="{'invisible':[('job_category','!=','talent')]}">
+							<field name="tech" invisible="1"/>
+							<separator string="Technical Skills" />
+							<field name="techskill_talent_ids">
+								<tree editable="bottom" delete="false" create="false">
+									<field name="skill_type_id" invisible="1" required="True"/>
+									<field name="skill_id" readonly="1" force_save="1"/>
+									<field name="skill_level_id" readonly="1" force_save="1" string="Benchmark"/>
+									 <!-- attrs="{'column_invisible':[('parent.emp_flag','!=',False)]}" -->
+									<field name ="tech_applicant_talent_level" string="Applicant Level" domain="[('id','in',tech_level_domain)]"/>
+									<field name ="tech_employee_talent_level" force_save="1" string="Employee Level" attrs="{'column_invisible':[('parent.emp_flag','=',False)]}"/>
+									<field name ="tech_validation_talent_date" force_save="1" string="Validation Date" attrs="{'column_invisible':[('parent.emp_flag','=',False)]}"/>
+									<field name="tech_level_domain" invisible="1"/>
+								</tree>
+							</field>
+						</page>
+						<page name="lang_level_talent" string="Language Levels" attrs="{'invisible':[('job_category','!=','talent')]}">
+							<field name="lang" invisible="1"/>
+							<separator string="Language Skills Level"/>
+							<field name="language_level_talent_ids">
+								<tree editable="bottom" delete="false" create="false">
+									 <field name="skill_type_id" invisible="1" required="True"/>
+						       <field name="skill_id" string="Language Skills"  readonly="1" force_save="1"/>
+									 <field name ="skill_level_id" string="Benchmark"  readonly="1" force_save="1"/>
+									  <!-- attrs="{'column_invisible':[('parent.emp_flag','!=',False)]}" -->
+						       <field name ="lang_applicant_talent_level" string="Applicant Level" domain="[('id','in',lang_level_domain)]"/>
+ 								   <field name ="lang_employee_talent_level" force_save="1" string="Employee Level" attrs="{'column_invisible':[('parent.emp_flag','=',False)]}"/>
+ 									 <field name ="lang_validation_talent_date" force_save="1" string="Validation Date" attrs="{'column_invisible':[('parent.emp_flag','=',False)]}"/>
+									 <field name="lang_level_domain" invisible="1"/>
+								</tree>
+							</field>
+						</page>
+						<!-- talent pages  talent pages  talent pages  talent pages  talent pages -->
+
+						<page name="survey" string="Answers ">
+						<separator string="Questions Answers"/>
+							<group >
+								<field name="area" readonly="1" force_save="1" />
+
+								<field name="graduation_status" readonly="1" force_save="1" />
+								<field name="university" readonly="1" force_save="1" />
+								<field name ="faculty" readonly="1" force_save="1" />
+								<field name ="english_status" readonly="1" force_save="1" />
+								<!-- new for report -->
+								<field name ="pronunciation" force_save="1"/>
+								<field name ="grammer" force_save="1"/>
+								<field name ="fluency" force_save="1"/>
+								<field name ="understanding_vocab" force_save="1"/>
+
+								
+								<field name="social_insurance" readonly="1" force_save="1" />
+								<field name="worked_4_raya" readonly="1" force_save="1" />
+								<field name="pc_laptop" readonly="1" force_save="1" />
+								<field name="internet_con" readonly="1" force_save="1" />
+								<field name="con_speed" readonly="1" force_save="1" />
+								<field name="internet_provider" readonly="1" force_save="1" />
+								<field name="type_of_connection" readonly="1" force_save="1" />
+								<field name="ready_work_from_home" readonly="1" force_save="1" />
+								<field name="operating_sys" readonly="1" force_save="1" />
+								<field name="indebendancy" readonly="1" force_save="1" />
+								<field name="prev_work_experience" readonly="1" force_save="1" />
+								<field name="prev_work_experience_what" attrs="{'required':[('prev_work_experience','=','Yes')],'invisible':[('prev_work_experience','!=','Yes')]}" readonly="1" force_save="1" />
+								<field name="why_leave" attrs="{'required':[('prev_work_experience','=','Yes')],'invisible':[('prev_work_experience','!=','Yes')]}" readonly="1" force_save="1" />
+								<field name="why_join" attrs="{'required':[('prev_work_experience','=','Yes')],'invisible':[('prev_work_experience','!=','Yes')]}" readonly="1" force_save="1" />
+							</group>
+							<group>
+								<field name="salary_expections" string="Salary Expections" readonly="1" force_save="1" />
+								<field name="rotational_shifts" readonly="1" force_save="1" />
+							</group>
+						</page>
+
+
+
+
+						<page name="hr_qualification" string="Qualifications">
+							<separator string="Educational Qualification" />
+							<field name="education_ids">
+								<tree>
+									<field name="type_id" />
+									<field name="institute_id" />
+									<field name="score" />
+									<field name="qualified_year" />
+									<field name="doc" />
+								</tree>
+								<form>
+									<group col="4">
+										<field name="type_id"  />
+										<field name="institute_id" />
+										<field name="score" />
+										<field name="qualified_year" />
+										<field name="doc" />
+									</group>
+								</form>
+							</field>
+							<separator string="Certifications" />
+							<field name="certification_ids">
+								<tree>
+									<field name="course_id" />
+									<field name="levels" />
+									<field name="year" />
+									<field name="doc" />
+								</tree>
+								<form>
+									<group col="4">
+										<field name="course_id"  />
+										<field name="levels" />
+										<field name="year" />
+										<field name="doc" />
+									</group>
+								</form>
+							</field>
+							<separator string="Professional Experience" />
+							<field name="profession_ids">
+								<tree>
+									<field name="job_id" />
+									<field name="location" />
+									<field name="period" />
+									<!-- <field name="from_date" /> -->
+									<!-- <field name="to_date" /> -->
+									<field name="doc" />
+								</tree>
+								<form>
+									<group col="4">
+										<field name="job_id" />
+										<field name="location" />
+										<field name="period"   />
+										<!-- <field name="from_date"   /> -->
+										<!-- <field name="to_date"  /> -->
+										<field name="doc" />
+									</group>
+								</form>
+							</field>
+						</page>
+						<page string="Application Summary" name="application_summary">
+                            <field name="description" placeholder="Feedback of interviews..."/>
+                        </page>
+						<page name="test_results" string="Test Results" >
+							<separator string="Applicant Test Results" />
+								<group>
+									<field name="english_test_result"  />
+									<field name="typing_test_result"  />
+								</group>
+						</page>
+						<page string="Trainee Status"  name="trainee_status">
+							<separator string="Trainee Status" />
+							<group>
+								<field name="joined_training"/>
+								<field name="not_joining_reason" attrs="{'invisible':[('joined_training','!=','no')]}"/>
+
+
+								<field name="training_start_date" />
+								<field name="tarinee_status" />
+
+								<field name="drop_date" attrs="{'invisible':[('tarinee_status','!=','dropped')]}"/>
+								<field name="drop_reason" attrs="{'invisible':[('tarinee_status','!=','dropped')]}"/>
+
+
+								<field name="quality_of_hiring_date" />
+							</group>
+						</page>
+						<page string="Feedback" name="feedback" >
+							<separator string="Interview Feedback" />
+							<group cols="4">
+								<field name="first_interview_feedback" />
+								<field name="first_interview_feedback_reason" />
+
+								<field name="second_interview_feedback" />
+								<field name="second_interview_feedback_reason" />
+
+								<field name="client_review_feedback" />
+								<field name="client_review_feedback_reason" />
+
+								<field name="job_offer_feedback" />
+								<field name="job_offer_feedback_reason" />
+
+								<field name="sector_projects_type" />
+								<field name="date_of_signing" />
+								<field name="hired" />
+								<field name="date_of_hiring" />
+								<field name="reason_if_not_hired" />
+							</group>
+						</page>
+					</notebook>
+				</xpath>
+			</field>
+		</record>
+
+
+
+
+
+		<record id="view_utm_source_view_tree" model="ir.ui.view">
+			<field name="name">view.utm.source.tree</field>
+			<field name="model">utm.source</field>
+			<field name="inherit_id" ref="utm.utm_source_view_tree"/>
+			<field name="arch" type="xml">
+				<xpath expr="//tree" position="inside">
+					<field name="main_source"/>
+				</xpath>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="main_utm_source_list">
+			<field name="name">Main Source</field>
+			<field name="model">main.utm.source</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+				</tree>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="main_utm_source_form">
+				<field name="name">Main Source</field>
+				<field name="model">main.utm.source</field>
+				<field name="arch" type="xml">
+						<form string="Main Source">
+							<sheet>
+								<group>
+									<group>
+										<field name="name"/>
+									</group>
+								</group>
+							</sheet>
+						</form>
+				</field>
+		</record>
+
+		<!-- actions opening views on models -->
+
+		<record model="ir.actions.act_window" id="main_utm_source_action_window">
+			<field name="name">Main Source</field>
+			<field name="res_model">main.utm.source</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context"></field>
+			<field name="help" type="html">
+					<p class="oe_view_nocontent_create">
+					Click to start add new Main Source.
+				</p>
+			</field>
+		</record>
+
+		<menuitem name="Main Source" id="main_utm_source_menu" parent="utm.marketing_utm"
+      action="main_utm_source_action_window"/>
+
+	<!--
+        <menuitem id="qualifications_menu" parent="hr_recruitment.menu_hr_recruitment_configuration"
+        name="Qualifications" sequence="3" groups="hr.group_hr_manager,hr.group_hr_user"/>
+
+
+         <menuitem id="emp_degree_menu" parent="qualifications_menu"
+        action="action_emp_degree" groups="hr.group_hr_manager,hr.group_hr_user"/>
+
+        Menu for Institute -->
+        <menuitem id="menu_hr_institute" parent="hr_recruitment.menu_hr_recruitment_configuration"
+        action="action_hr_institute" groups="hr.group_hr_manager,hr.group_hr_user" sequence="6"/>
+
+        <!-- Menu for Certifications
+        <menuitem id="emp_cert_menu" parent="qualifications_menu"
+        action="action_emp_cert" groups="hr.group_hr_manager,hr.group_hr_user"/>
+        -->
+        <!-- Menu item for Skills
+        <menuitem id="skills_menu" parent="hr_recruitment.menu_hr_recruitment_configuration"
+        name="Skills" sequence="4" groups="hr.group_hr_manager,hr.group_hr_user"/>
+        -->
+        <!-- Menu for Non-Technical Skills
+        <menuitem id="nontech_skills_menu" parent="skills_menu"
+        action="action_nontech_skills" groups="hr.group_hr_manager,hr.group_hr_user"/>
+        -->
+        <!-- Menu for Technical Skills
+        <menuitem id="tech_skills_menu" parent="skills_menu" action="action_tech_skills"
+         groups="hr.group_hr_manager,hr.group_hr_user"/>
+	 -->
+</odoo>

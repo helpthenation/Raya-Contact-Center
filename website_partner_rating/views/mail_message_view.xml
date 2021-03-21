@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record model="ir.ui.view" id="view_message_tree_for_partner_rating">
+            <field name="name">website.skills.tree.partner.rating</field>
+            <field name="model">website.skills</field>
+            <field name="priority">25</field>
+            <field name="arch" type="xml">
+                <tree string="Skills">
+                    <field name="skill_rate"/>
+                    <field name="skill_description"/>
+                    <field name="website_message"/>
+                    <field name="partner_id"/>
+                    <!-- <field name="website_published"/> -->
+                </tree>
+            </field>
+        </record>    
+
+
+        <record id="view_message_form_partner_rating" model="ir.ui.view">
+            <field name="name">website.skills</field>
+            <field name="model">website.skills</field>
+            <field name="arch" type="xml">
+            <form string="Skills">
+                <sheet>
+                    <group>
+                        <group>
+							<field name="skill_rate"/>
+							<field name="skill_description"/>
+							<field name="website_message"/>
+							<field name="partner_id"/>
+                        </group>
+					</group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
+            

@@ -1,0 +1,95 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="wc_interview_checklist.list">
+      <field name="name">wc_interview_checklist list</field>
+      <field name="model">wc_interview_checklist.wc_interview_checklist</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="wc_interview_checklist.form">
+      <field name="name">wc_interview_checklist list</field>
+      <field name="model">wc_interview_checklist.wc_interview_checklist</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="applicant_wc_interview_checklist">
+      <field name="name">applicant_wc_interview_checklist</field>
+      <field name="model">hr.applicant</field>
+      <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//notebook" position="inside">
+          <page name="interview_checklist_page" string="Interview Checklist" attrs="{'invisible':[('interview_checklist_checkbox','!=',True)]}" >
+            <field name="interview_checklist_checkbox" invisible="1"/>
+
+            <field name="interview_checklist" force_save="1" attrs="{'readonly':[('interview_checklist_checkbox','!=',True)]}" >
+              <tree editable="buttom" delete="0" create="0">
+                <field name="name" readonly="1"/>
+                <field name="check" attrs="{'readonly':[('parent.interview_checklist_checkbox','!=',True)]}"/>
+                <field name="note" attrs="{'readonly':[('parent.interview_checklist_checkbox','!=',True)]}"/>
+              </tree>
+            </field>
+          </page>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="job_wc_interview_n_checklist2" model="ir.ui.view">
+              <field name="name">hr.job.form</field>
+              <field name="model">hr.job</field>
+              <field name="inherit_id" ref="wc_screening_excel.hr_job_form_excel"/>
+              <field name="arch" type="xml">
+                <field name="excel_check" position="before">
+                  <field name="interview_check"/>
+                </field>
+
+              </field>
+      </record>
+
+    <record model="ir.ui.view" id="job_wc_interview_n_checklist">
+      <field name="name">job_wc_interview_checklist</field>
+      <field name="model">hr.job</field>
+      <field name="inherit_id" ref="hr.view_hr_job_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//notebook" position="inside">
+          <page name="interview_checklist_page" string="Interview Checklist" attrs="{'invisible':[('interview_check','!=',True)]}">
+            <group>
+              <field name="interview_checklist"/>
+            </group>
+          </page>
+        </xpath>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="stage_wc_interview_checklist">
+      <field name="name">stage_wc_interview_checklist</field>
+      <field name="model">hr.recruitment.stage</field>
+      <field name="inherit_id" ref="hr_recruitment.hr_recruitment_stage_form"/>
+      <field name="arch" type="xml">
+        <field name="ta_employee_transfer" position="after">
+          <field name="interview_checklist_checkbox"/>
+        </field>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="interview_checklist_action">
+     <field name="name">Interview Checklist</field>
+     <field name="res_model">wc_interview_checklist.wc_interview_checklist</field>
+     <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Interview Checklist" id="interview_checklist_menu" parent="hr_recruitment.menu_hr_recruitment_configuration"
+                  action="interview_checklist_action"/>
+  </data>
+</odoo>

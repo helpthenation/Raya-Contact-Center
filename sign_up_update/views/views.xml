@@ -1,0 +1,160 @@
+<odoo>
+  <data>
+        <record id="res_partner_form_id_inherited" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="website" position="before">
+                     <field name="national_id"   attrs="{'invisible': [('type','!=','contact')],'required':[('type','=','contact')]}" />
+                     
+                 </field>
+                
+                
+                
+                <xpath expr="//form/sheet/group" position="after">
+					<notebook>
+						<page name="hr_skills" string="HR Skills" >
+							<separator string="Non Technical Skills" />
+							<field name="nontechskill_ids" >
+                            <tree>
+                            <field name="skill_id" />
+                            <field name="nontech_applicant_talent_level" />
+                            </tree>
+                            <form>
+                            <field name="skill_id" />
+                            <field name="nontech_applicant_talent_level" />
+                            </form>
+                        </field>
+						</page>
+						<page name="hr_skills" string="Technichal Skills">
+							<separator string="Technical Skills" />
+							<field name="techskill_ids" >
+                            <tree>
+                            <field name="skill_id" />
+                            <field name="tech_applicant_talent_level" />
+                            </tree>
+                            <form>
+                            <field name="skill_id" />
+                            <field name="tech_applicant_talent_level" />
+                            </form>
+                        </field>
+						</page>
+                        <page name="language_skills" string="Language Skills" >
+							<separator string="Languages" />
+							<field name="language_level_talent_ids" >
+                                <tree>
+                                <field name="skill_id" />
+                                <field name="lang_applicant_talent_level" />
+                                </tree>
+                                <form>
+                                <field name="skill_id" />
+                                <field name="lang_applicant_talent_level" />
+                                </form>
+                            </field>
+						</page>
+						<page name="hr_qualification" string="Qualifications">
+							<separator string="Educational Qualification" />
+							<field name="education_ids">
+								<tree>
+									<field name="type_id" />
+									<field name="institute_id" />
+									<field name="score" />
+									<field name="qualified_year" />
+									<field name="doc" />
+								</tree>
+								<form>
+									<group col="4">
+										<field name="type_id"  />
+										<field name="institute_id" />
+										<field name="score" />
+										<field name="qualified_year" />
+										<field name="doc" />
+									</group>
+								</form>
+							</field>
+							<separator string="Certifications" />
+							<field name="certification_ids">
+								<tree>
+									<field name="course_id" />
+									<field name="levels" />
+									<field name="year" />
+									<field name="doc" />
+								</tree>
+								<form>
+									<group col="4">
+										<field name="course_id"  />
+										<field name="levels" />
+										<field name="year" />
+										<field name="doc" />
+									</group>
+								</form>
+							</field>
+							<separator string="Professional Experience" />
+							<field name="profession_ids">
+								<tree>
+									<field name="job_id" />
+									<field name="location" />
+									<field name="period" />
+									<field name="doc" />
+								</tree>
+								<form>
+									<group col="4">
+										<field name="job_id" />
+										<field name="location" />
+										<field name="period"   />
+										<field name="doc" />
+									</group>
+								</form>
+							</field>
+						</page>
+					</notebook>
+				</xpath>
+
+            </field>
+        </record>
+    </data>
+    <template id="assets_frontend_show_password" inherit_id="website.assets_frontend" name="Assets Frontend show password">
+        <xpath expr="." position="inside">
+            <link rel='stylesheet' href='/sign_up_update/static/src/css/sign_up_update.css'/>
+            <script type="text/javascript" src="/sign_up_update/static/src/js/sign_up_update.js"></script>
+        </xpath>
+    </template>
+
+    <template id="wk_show_hide_password_1" inherit_id="auth_signup.fields">
+        <xpath expr="//div[@class='form-group field-password pt-2']//input" position="replace">
+            <div class="input-group">
+                <input type="password" name="password" id="password" class="form-control" required="required" t-att-autofocus="'autofocus' if only_passwords else None"/>
+                <div class="input-group-append">
+                    <button class="btn btn-secondary" type="button">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+        </xpath>
+
+        <xpath expr="//div[@class='form-group field-confirm_password']//input" position="replace">
+            <div class="input-group">
+                <input type="password" name="confirm_password" id="confirm_password" class="form-control" required="required"/>
+                <div class="input-group-append">
+                    <button class="btn btn-secondary" type="button">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="wk_show_hide_password_2" inherit_id="web.login">
+        <xpath expr="//div[@class='form-group field-password']//input" position="replace">
+            <div class="input-group">
+                <input type="password" name="password" id="password" class="form-control" required="required" t-att-autofocus="'autofocus' if login else None"/>
+                <div class="input-group-append">
+                    <button class="btn btn-secondary" type="button">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

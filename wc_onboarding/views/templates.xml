@@ -1,0 +1,92 @@
+<odoo>
+    <data>
+      <record id="email_template_onboarding" model="mail.template">
+        <field name="name">Onboarding: Email</field>
+        <field name="model_id" ref="wc_onboarding.model_onboarding_onboarding"></field>
+        <!-- <field name="email_from">${object.user_id.email_formatted |safe}</field>                                 -->
+        <!-- <field name="partner_to">${object.targeted_partner |safe}</field> -->
+        <field name="email_to">${object.email |safe}</field>
+        <!-- <field name="email_cc">${object.manager.work_email |safe}</field>                              -->
+        <field name="subject"> Onboarding Email for the ${object.job_id.name} Position</field>
+        <field name="body_html" type="html">
+          <div style="margin: 0px; padding: 0px;">Dear ${object.employee_id.name},
+            <p>
+                Hello ${object.common_name},<br/><br/>
+                You can find the attachments below.<br/>
+            </p>
+                  <table>
+    <tbody>
+        % for line in object.email_ids:
+        
+        <tr>
+          %if line.type=='document':
+          <th>Documents</th>
+          <br/>
+            <td>${line.name}</td>
+                        <br/>
+          %endif
+          % endfor
+          % for line in object.email_ids:
+          %if line.type=='video':
+          <th>Videos</th>
+          <br/>
+          <td>
+          <a href="${line.url | safe}">${line.name}</a></td>
+          <br/>
+          %endif
+        </tr>
+        % endfor
+    </tbody>
+</table>
+            Thank you,
+            % if object.user_id.signature:
+                <br />
+                ${object.user_id.signature | safe}
+            % endif
+          </div>
+        </field>
+      </record>
+
+<record id="email_template_online_onboarding" model="mail.template">
+        <field name="name">Onboarding: Online Onboarding</field>
+        <field name="model_id" ref="wc_onboarding.model_onboarding_onboarding"></field>
+        <!-- <field name="email_from">${object.user_id.email_formatted |safe}</field>                                 -->
+        <!-- <field name="partner_to">${object.targeted_partner |safe}</field> -->
+        <field name="email_to">${object.email |safe}</field>
+        <!-- <field name="email_cc">${object.manager.work_email |safe}</field>                              -->
+        <field name="subject"> Online Onboarding Email for the ${object.job_id.name} Position</field>
+        <field name="body_html" type="html">
+          <div style="margin: 0px; padding: 0px;">Dear ${object.employee_id.name},
+            <p>
+                Hello ${object.common_name},<br/><br/>
+                You can find the attachments in the link below.<br/>
+                your Oline Onboarding data
+            </p>
+            <table>
+    <tbody>
+        % for line in object.online_share_ids:
+        <tr>
+            <td>${line.name}</td>
+                        <br/>
+
+        </tr>
+        % endfor
+    </tbody>
+</table>
+<div style="margin: 16px 0px 16px 0px;">
+            <a href="http://64.225.53.244:5052/my/online" style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">Online Onboarding</a>
+                    </div>
+
+            <br/>
+
+            Thank you,
+            % if object.user_id.signature:
+                <br />
+                ${object.user_id.signature | safe}
+            % endif
+          </div>
+        </field>
+      </record>
+
+    </data>
+</odoo>

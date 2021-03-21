@@ -1,0 +1,216 @@
+<odoo>
+  <data>
+<!-- transfer employee cron -->
+<record id='clear_consumed' model='ir.cron'>
+            <field name='name'>transfer employee</field>
+            <field name='model_id' ref='model_hr_applicant'/>
+            <field name='state'>code</field>
+            <field name='code'>
+            model.trans_emp_enhance()
+            </field>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>days</field>
+            <field name='numbercall'>-1</field>
+            <field name="priority">0</field>
+            <field name="doall" eval="True"/>
+            <field name="nextcall">2021-03-11 00:00:00</field>
+            <field name="user_id" ref="base.user_root" />
+            <field name="active" eval="True"/>
+        </record>
+<!-- end cron -->
+    <record model="ir.ui.view" id="inherit_prject_emp_filter">
+  		<field name="name">inherit_prject_emp_filter</field>
+  		<field name="model">hr.employee</field>
+  		<field name="inherit_id" ref="hr.view_employee_filter"/>
+  		<field name="arch" type="xml">
+  			<field name="name" position="after">
+          <field name="hr_id"/>
+          <field name="identification_id"/>
+        </field>
+  		</field>
+  	</record>
+    <record model="ir.ui.view" id="inherit_prject_emp_talent_many_view">
+  		<field name="name">inherit_prject_emp_talent_many_view</field>
+  		<field name="model">hr.employee</field>
+  		<field name="inherit_id" ref="hr.view_employee_form"/>
+  		<field name="arch" type="xml">
+  			<group name="departure" position="after">
+          <group string="RCC">
+            <field name="raya_team"/>
+            <field name="project" attrs="{'invisible':[('raya_team','=',True)],'required':[('raya_team','=',False)]}"/>
+    				<field name="hr_id"/>
+          </group>
+  			</group>
+        <!-- <field name="identification_id" position="attribute">
+
+        </field> -->
+  		</field>
+  	</record>
+    <record model="ir.ui.view" id="wc_hiring_request_talent_many_view">
+  		<field name="name">wc_hiring_request_talent_many_view</field>
+  		<field name="model">hr.job</field>
+  		<field name="inherit_id" ref="wc_hiring_request.hr_contract_form_view_inherit"/>
+  		<field name="arch" type="xml">
+  			<page name="hiring_request_page" position="attributes">
+  				<attribute name="attrs">{'invisible':[('job_category','!=','operational')]}</attribute>
+  			</page>
+  			<page name="hiring_request_page" position="after">
+  				<page string="Hiring Request" name="hiring_request_page_many" attrs="{'invisible':[('job_category','!=','talent')]}">
+  					<field name="hiring_request_many" readonly="1" force_save="1"/>
+  				</page>
+  			</page>
+  		</field>
+  	</record>
+    <record model="ir.ui.view" id="wc_hiring_request_talent_exts">
+      <field name="name">wc_hiring_request_talent_exts</field>
+      <field name="model">hiring.request</field>
+      <field name="inherit_id" ref="wc_hiring_request.view_hiring_request_form"/>
+        <field name="arch" type="xml">
+          <field name="center" position="replace">
+            <field name="center" string="Center" attrs="{'readonly':[('state','!=','draft')],'invisible':[('category','=','Talent Acq')]}"/>
+            <field name="center" string="Department" attrs="{'readonly':[('state','!=','draft')],'invisible':[('category','=','operational')]}"/>
+          </field>
+          <xpath expr="//header" position="inside">
+            <field name="targeted_partners" invisible="1"/>
+            <button name="send_hiring_request_email" class="oe_highlight" type="object" string="Email" attrs="{'invisible':['|',('state','!=','approved'),('sourceing_type','!=','internal')]}"/>
+          </xpath>
+          <field name="category" position="attributes">
+            <attribute name="required">1</attribute>
+            <attribute name="force_save">1</attribute>
+            <attribute name="readonly">1</attribute>
+          </field>
+          <field name="category" position="after">
+            <field name="sourceing_type" attrs="{'invisible':[('category','!=','Talent Acq')],'required':[('category','=','Talent Acq')],'readonly':[('state','!=','draft')]}"/>
+            <field name="share_option" attrs="{'invisible':[('sourceing_type','!=','internal')],'required':[('sourceing_type','=','internal')],'readonly':[('state','!=','draft')]}"/>
+            <field name="employee_id" attrs="{'invisible':[('share_option','!=','employee')],'required':[('share_option','=','employee')],'readonly':[('state','!=','draft')]}" widget="many2many_tags"/>
+            <field name="company_id" attrs="{'invisible':[('share_option','!=','company')],'required':[('share_option','=','company')],'readonly':[('state','!=','draft')]}"/>
+            <field name="dept_id" attrs="{'invisible':[('share_option','!=','department')],'required':[('share_option','=','department')],'readonly':[('state','!=','draft')]}" widget="many2many_tags"/>
+            <field name="employee_tag" attrs="{'invisible':[('share_option','!=','employee_tag')],'required':[('share_option','=','employee_tag')],'readonly':[('state','!=','draft')]}" widget="many2many_tags"/>
+            <field name="proj_id" attrs="{'invisible':[('share_option','!=','project')],'required':[('share_option','=','project')],'readonly':[('state','!=','draft')]}" widget="many2many_tags"/>
+          </field>
+          <field name="project" position="attributes">
+            <attribute name="attrs">{'required':['|',('share_option','=','project'),('category','=','Talent Acq')],'readonly':[('state','!=','draft')]}</attribute>
+          </field>
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="wc_mail_template_talent_exts">
+      <field name="name">wc_mail_template_talent_exts</field>
+      <field name="model">mail.template</field>
+      <field name="inherit_id" ref="mail.email_template_form"/>
+      <field name="arch" type="xml">
+        <field name="model_id" position="after">
+          <field name="internal_sourcing_template"/>
+          <field name="ta_employee_transfer" string="TA Employee Transfer"/>
+          <field name="ta_transfer_manager_contact"  string="TA Manager Contact"/>
+          <field name="refuse_email_template"/>
+        </field>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="wc_mail_template_choose_stage">
+      <field name="name">wc_mail_template_choose_stage</field>
+      <field name="model">hr.recruitment.stage</field>
+      <field name="inherit_id" ref="hr_recruitment.hr_recruitment_stage_form"/>
+      <field name="arch" type="xml">
+        <field name="template_id" position="after">
+          <field name="ta_employee_transfer" string="TA Employee Transfer" attrs="{'invisible':[('job_category','!=','talent')]}"/>
+        </field>
+        <field name="job_ids" position="after">
+            <field name="job_category"/>
+        </field>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="wc_talent_employee_hr_applicant">
+      <field name="name">wc_talent_employee_hr_applicant</field>
+      <field name="model">hr.applicant</field>
+      <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//header" position="inside">
+          <button string="Lost intreset" name="lost_interest_applicant" type="object"  attrs="{'invisible':[('job_category','=','talent')]}"/>
+          <button string="Not Matching Criteria" name="not_matching_application"  type="object" attrs="{'invisible':[('job_category','=','talent')]}"/>
+          <button string="No show"  name="no_show" type="object" attrs="{'invisible':[('job_category','=','talent')]}"/>
+
+          <field name="ta_employee_transfer" invisible="1"/>
+          <field name="transfer_form_is_sent" invisible="1"/>
+          <field name="acceptance_is_done" invisible="1"/>
+          <field name="manager_contacted" invisible="1"/>
+          <field name="release_is_setted" invisible="1"/>
+          <field name="released_confirmed" invisible="1"/>
+          <field name="created_employee" invisible="1"/>
+          <button class="oe_highlight" name="send_transfer_form_ta" type="object" string="Send Transfer Form" attrs="{'invisible':['|','|','|',('created_employee','=',True),('released_confirmed','=',True),('emp_id','=',False),('ta_employee_transfer','=',False)]}"/>
+          <button class="oe_highlight" name="employee_acceptance_btn" type="object" string="Employee Acceptance" attrs="{'invisible':[('transfer_form_is_sent','=',False)]}"/>
+          <button class="oe_highlight" name="contact_manager_btn" type="object" string="Contact Manager" attrs="{'invisible':[('acceptance_is_done','=',False)]}"/>
+          <button class="oe_highlight" name="set_release_btn" type="object" string="Set Release" attrs="{'invisible':['|',('manager_contacted','=',False),('release_is_setted','=',True)]}"/>
+          <button class="oe_highlight" name="confirm_release_btn" type="object" string="Confirm Transfer" attrs="{'invisible':['|',('released_confirmed','=',True),('release_is_setted','=',False)]}"/>
+        </xpath>
+        <field name="job_id" position="after">
+          <field name="job_category" required="1" force_save="1" readonly="1"/>
+        </field>
+        <field name="job_id" position="attributes">
+  				<attribute name="domain">[('job_category','=',job_category),('company_id','=',company_id)]</attribute>
+          <attribute name="required">1</attribute>
+  			</field>
+        <field name="project" position="attributes">
+          <attribute name="attrs">{'readonly':[('job_category','=','talent')]}</attribute>
+          <attribute name="force_save">1</attribute>
+        </field>
+
+        <field name="partner_id" position="attributes">
+          <attribute name="invisible">0</attribute>
+          <attribute name="readonly">1</attribute>
+          <attribute name="force_save">1</attribute>
+        </field>
+        <field name="emp_id" position="attributes">
+          <attribute name="invisible">0</attribute>
+        </field>
+        <field name="emp_id" position="after">
+          <field name="manager"/>
+        </field>
+        <xpath expr="//notebook" position="inside">
+          <page name="ta_employee_transfer" string="Transfer Employee Data" attrs="{'invisible':[('job_category','!=','talent')]}">
+            <group>
+              <field name="acceptance_date" readonly="1" force_save="1"/>
+              <field name="release_date" readonly="1" force_save="1"/>
+              <field name="release_note" readonly="1" force_save="1"/>
+              <field name="released_date" readonly="1" force_save="1"/>
+            </group>
+          </page>
+        </xpath>
+      </field>
+    </record>
+    <record model="ir.ui.view" id="wc_ta_extention_wizard_for_transfer">
+        <field name="name">wc_ta_extention_wizard_for_transfer</field>
+        <field name="model">wizard.date.add</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+          <form>
+            <group>
+              <field name="acceptance_add" invisible="1"/>
+              <field name="release_add" invisible="1"/>
+              <field name="release_confirm" invisible="1"/>
+              <field name="readonly_date" readonly="1" force_save="1" attrs="{'invisible':[('release_confirm','!=',True)]}"/>
+              <field name="date" required="1"/>
+              <field name="release_note" attrs="{'invisible':[('release_add','!=',True)]}"/>
+            </group>
+              <footer>
+                  <button name="accept_and_put_date" type="object" string="Accept" attrs="{'invisible':[('acceptance_add','!=',True)]}"/>
+                  <button name="set_release_date" type="object" string="Release" attrs="{'invisible':[('release_add','!=',True)]}"/>
+                  <button name="confirm_release_date" type="object" string="Confirm" attrs="{'invisible':[('release_confirm','!=',True)]}"/>
+                  or
+                 <button name="cancel" string="Cancel" special="cancel" class="oe_link"/>
+              </footer>
+         </form>
+        </field>
+     </record>
+     <record model="ir.actions.act_window" id="wizar_action_dates_complete">
+         <field name="name">Complete</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">wizard.date.add</field>
+         <field name="view_mode">form</field>
+         <field name="view_id" ref="wc_ta_extention_wizard_for_transfer"/>
+     </record>
+  </data>
+</odoo>

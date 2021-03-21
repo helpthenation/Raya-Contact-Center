@@ -1,0 +1,54 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="blacklist_process_wiz_form">
+        <field name="name">blacklist_process_wiz_form</field>
+        <field name="model">blacklist.warning.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+          <form>
+                  <h1>
+                    This Applicant will be Blacklisted, Confirm?
+                  </h1>
+              <footer>
+                 <button name="do_blacklist" type="object" string="Process"/>
+                  or
+                 <button name="cancel" string="Cancel" special="cancel" class="oe_link"/>
+              </footer>
+         </form>
+        </field>
+     </record>
+     <record id="action_blacklist_process_wiz" model="ir.actions.act_window">
+         <field name="name">action_blacklist_process_wiz</field>
+         <field name="res_model">blacklist.warning.wizard</field>
+         <field name="view_mode">form</field>
+         <field name="view_id" ref="blacklist_process_wiz_form"/>
+         <field name="target">new</field>
+     </record>
+
+     <record model="ir.ui.view" id="blacklist_unblacklist_wiz_form">
+         <field name="name">blacklist_unblacklist_wiz_form</field>
+         <field name="model">unblacklist.warning.wizard</field>
+         <field name="type">form</field>
+         <field name="arch" type="xml">
+           <form>
+                   <h1>
+                     This Applicant will be Unblacklisted, Confirm?
+                   </h1>
+               <footer>
+                  <button name="do_un_blacklist" type="object" string="unblacklist"/>
+                   or
+                  <button name="cancel" string="Cancel" special="cancel" class="oe_link"/>
+               </footer>
+          </form>
+         </field>
+      </record>
+      <record id="action_blacklist_unblacklist_wiz" model="ir.actions.act_window">
+          <field name="name">action_blacklist_unblacklist_wiz</field>
+          <field name="res_model">unblacklist.warning.wizard</field>
+          <field name="view_mode">form</field>
+          <field name="view_id" ref="blacklist_unblacklist_wiz_form"/>
+          <field name="target">new</field>
+      </record>
+
+   </data>
+</odoo>

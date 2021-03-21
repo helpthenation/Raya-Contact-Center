@@ -1,0 +1,238 @@
+<odoo>
+  <data>
+    <record id="hr_skills_form_raya" model="ir.ui.view">
+        <field name="name">hr.skills.form.raya</field>
+        <field name="model">hr.skill.type</field>
+        <field name="inherit_id" ref="hr_skills.hr_employee_skill_type_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div[@class='oe_title']" position="after">
+              <group>
+                <group>
+                  <div class="o_row">
+                      <label for="skill_type"/>:
+                      <field name="skill_type"/>
+                  </div>
+                </group>
+              </group>
+            </xpath>
+
+            <xpath expr="//sheet/group/field[@name='skill_ids']/tree/field[@name='name']" position="after">
+              <field name="expiry_skill"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="hr_skills_tree_raya_level" model="ir.ui.view">
+        <field name="name">hr.skills.tree.raya.level</field>
+        <field name="model">hr.skill.level</field>
+        <field name="inherit_id" ref="hr_skills.employee_skill_level_view_tree"/>
+        <field name="arch" type="xml">
+          <xpath expr="//tree/field[@name='level_progress']" position="attributes">
+            <attribute name="string">Progress From (%)</attribute>
+          </xpath>
+            <xpath expr="//tree/field[@name='level_progress']" position="after">
+              <field name="progress_to" widget="progressbar"/>
+              <field name="skills_ids"  widget="many2many_tags"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="hr_skills_form_raya_level" model="ir.ui.view">
+        <field name="name">hr.skills.form.raya.level</field>
+        <field name="model">hr.skill.level</field>
+        <field name="inherit_id" ref="hr_skills.employee_skill_level_view_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//sheet/group/field[@name='level_progress']" position="attributes">
+            <attribute name="string">Progress From (%)</attribute>
+          </xpath>
+          <xpath expr="//sheet/group/field[@name='level_progress']" position="after">
+            <field name="progress_to"/>
+          </xpath>
+          <xpath expr="//sheet/group" position="after">
+            <notebook>
+              <page string="Skills">
+                <field name="skills_ids" widget="many2many_tags"/>
+              </page>
+            </notebook>
+          </xpath>
+        </field>
+    </record>
+
+    <record id="hr_employee_skills_form_raya_level" model="ir.ui.view">
+        <field name="name">hr.employee.skill.form.raya.level</field>
+        <field name="model">hr.employee.skill</field>
+        <field name="inherit_id" ref="hr_skills.employee_skill_view_form"/>
+        <field name="arch" type="xml">
+
+          <!-- <xpath expr="//sheet/group/group[2]/field[@name='skill_level_id']" position="attributes">
+            <attribute name="domain">[('id','in',skills_ids)]</attribute>
+          </xpath> -->
+
+          <xpath expr="//sheet/group/group/field[@name='skill_id']" position="after">
+            <!-- <field name="skills_ids" invisible="1"/> -->
+            <field name="expiry_skill" invisible="1"/>
+            <field name="validation_date" attrs = "{'required':[('expiry_skill','=',True)],'invisible':[('expiry_skill','!=',True)]}"/>
+            <field name="current_degree" readonly="1" force_save="1" widget="progressbar"/>
+
+          </xpath>
+
+        </field>
+    </record>
+
+    <!-- <record id="hr_employee_form_raya_skills" model="ir.ui.view">
+        <field name="name">hr.employee.form.raya.skills</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_skills.hr_employee_view_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//div/div[2]" position="replace">
+            <div class="o_hr_skills_group o_group_skills col-lg-5 d-flex flex-column">
+              <separator string="Skills"/>
+              <separator string="Language"/>
+              <field mode="tree" nolabel="1" name="employee_lang_skill_ids" >
+                  <tree>
+                      <field name="skill_type_id" invisible="1"/>
+                      <field name="skill_id"/>
+                      <field name="skill_level_id"/>
+                      <field name="level_progress" widget="progressbar"/>
+                      <field name="validation_date"/>
+                      <button name="update_validity" string="." type="object" class="oe_highlight"/>
+                  </tree>
+              </field>
+              <separator string="Technical"/>
+              <field mode="tree" nolabel="1" name="employee_tech_skill_ids" >
+                  <tree>
+                      <field name="skill_type_id" invisible="1"/>
+                      <field name="skill_id"/>
+                      <field name="skill_level_id"/>
+                      <field name="level_progress" widget="progressbar"/>
+                      <field name="validation_date"/>
+                      <button name="update_validity" string="." type="object" class="oe_highlight"/>
+                  </tree>
+              </field>
+              <separator string="Non Technical"/>
+              <field mode="tree" nolabel="1" name="employee_non_tech_skill_ids" >
+                  <tree>
+                      <field name="skill_type_id" invisible="1"/>
+                      <field name="skill_id"/>
+                      <field name="skill_level_id"/>
+                      <field name="level_progress" widget="progressbar"/>
+                      <field name="validation_date"/>
+                      <button name="update_validity" string="." type="object" class="oe_highlight"/>
+                  </tree>
+              </field>
+            </div>
+
+          </xpath>
+        </field>
+    </record> -->
+
+    <record id="hr_employee_form_raya_skills" model="ir.ui.view">
+        <field name="name">hr.employee.form.raya.skills</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_skills.hr_employee_view_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//div/div[2]" position="replace">
+            <div class="o_hr_skills_group o_group_skills col-lg-5 d-flex flex-column">
+              <separator string="Skills"/>
+              <button name="open_update_validity" string="Update Expiry" class="btn btn-secondary text-capitalize" type="object" />
+              <field mode="tree" nolabel="1" name="employee_skill_ids"  widget="hr_skills">
+                  <tree>
+                      <field name="skill_type_id" invisible="1"/>
+                      <field name="skill_id"/>
+                      <field name="skill_level_id"/>
+                      <field name="level_progress" widget="progressbar"/>
+                      <field name="current_degree" readonly="1" force_save="1" widget="progressbar"/>
+                      <field name="validation_date" t-options="('format':'dd/MM/yyyy')"/>
+                      <!-- <field name="expiry_skill" invisible="1"/> -->
+                      <!-- attrs="{'readonly':[('expiry_skill','=',False)]}" -->
+                  </tree>
+              </field>
+            </div>
+          </xpath>
+        </field>
+    </record>
+
+    <record id="validate_skills_wizard_form" model="ir.ui.view">
+        <field name="name">validate.skills.form</field>
+        <field name="model">validate.skills</field>
+        <field name="arch" type="xml">
+          <form >
+            <group>
+              <field name="validate_lines" nolabel="1" context="{'default_employee_id': active_id}">>
+                <!-- editable='top' -->
+                <tree editable='bottom'>
+                  <field name="skill_id" options="{'no_create': True, 'no_create_edit':True}"/>
+                  <field name="level_id" required="1" options="{'no_create': True, 'no_create_edit':True}" />
+                  <!-- domain="[('id','in',skills_ids)]" -->
+                  <field name="date" required="1"/>
+                  <!-- <field name="skills_ids" invisible="1"/> -->
+                  <field name="employee_id" invisible="1"/>
+                </tree>
+                <!-- <form>
+                  <group>
+                    <group>
+                        <field name="product_id" options="{'no_create': True}"/>
+                        <label for="robbing_qty"/>
+                        <div class="o_row">
+                            <field name="robbing_qty" attrs="{'readonly': [('tracking', '=', 'serial')]}"/>
+                            <field name="product_uom_category_id" invisible="1"/>
+                            <field name="product_uom_id" groups="uom.group_uom"/>
+                        </div>
+                        <field name="robbing_lot" groups="stock.group_production_lot"
+                            attrs="{'invisible': ['|',('product_id', '=', False),('tracking', '=', 'none')]}"/>
+
+                    </group>
+                    <group>
+                        <field name="picking_id" invisible="1"/>
+                        <field name="tracking" invisible="1"/>
+                        <field name="lot_id" groups="stock.group_production_lot"
+                            attrs="{'invisible': ['|',('product_id', '=', False),('tracking', '=', 'none')]}"/>
+                        <field name="location_id" />
+                        <field name="company_id" invisible="1"/>
+                        <field name="mrp_raw_id" invisible="1"/>
+                      </group>
+                  </group>
+                </form> -->
+              </field>
+            </group>
+            <footer>
+              <button name="update_validity" string="Update" type="object" class="btn-primary"/>
+              <button string="Cancel" class="btn-secondary" special="cancel" />
+            </footer>
+          </form>
+        </field>
+    </record>
+    <!--
+    <record id="hr_employee_form_raya_skills" model="ir.ui.view">
+        <field name="name">hr.employee.form.raya.skills</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_skills.hr_employee_view_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//div/div[2]/field[@name='employee_skill_ids']" position="replace">
+            <field mode="tree" nolabel="1" name="employee_skill_ids"  widget="hr_skills">
+                <tree>
+                    <field name="skill_type_id" invisible="1"/>
+                    <field name="skill_id"/>
+                    <field name="skill_level_id"/>
+                    <field name="level_progress" widget="progressbar"/>
+                    <field name="validation_date" t-options="('format':'dd/MM/yyyy')"/>
+                    <field name="expiry_skill" invisible="1"/> -->
+                    <!-- attrs="{'readonly':[('expiry_skill','=',False)]}"
+                    <button name="update_validity" string="validite" class="btn btn-secondary" type="object" />
+                </tree>
+            </field>
+          </xpath>
+        </field>
+
+      </record> -->
+  </data>
+
+  <template id="assets_backend" name="hr_skills_v_assets_backend" inherit_id="web.assets_backend">
+    <xpath expr="." position="inside">
+      <script type="text/javascript" src="/raya_skills/static/js/skill_widget.js"></script>
+    </xpath>
+ </template>
+
+</odoo>

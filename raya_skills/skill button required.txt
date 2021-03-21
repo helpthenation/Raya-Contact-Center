@@ -1,0 +1,32 @@
+in addons/hr_skills/static/src/js/resume_widget.js
+
+in var SkillsRenderer = AbstractGroupedOne2ManyRenderer.extend({
+
+***new
+  _renderValidationIcon: function() {
+        return qweb.render('hr_check_button');
+    },
+
+***replace
+    _renderRow: function (record) {
+        var $row = this._super(record);
+        // Add progress bar widget at the end of rows
+        var $td = $('<td/>', {class: 'o_data_cell o_skill_cell'});
+        var progress = new FieldProgressBar(this, 'level_progress', record, {
+            current_value: record.data.level_progress,
+            attrs: this.arch.attrs,
+        });
+        progress.appendTo($td);
+        $row.append($td);
+
+        var $validite = $(this._renderValidationIcon());
+        var today = new Date()
+        var nowDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        var d1 = Date.parse(record.data.validation_date);
+        var d2 = Date.parse(nowDate);
+        if (d1 < d2) {
+            $row.append($validite);
+        }
+
+        return $row;
+    },

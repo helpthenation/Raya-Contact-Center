@@ -1,0 +1,211 @@
+<?xml version="1.0"?>
+<odoo>
+        <record id="applicant_lost_interest_reason_view_form" model="ir.ui.view">
+            <field name="name">applicant.lost.interest.reason.form</field>
+            <field name="model">applicant.lost.interest.reason</field>
+            <field name="arch" type="xml">
+                <form string="Lost Interest Reason">
+                    <group class="oe_title">
+                        <field name="interest_reason_id"/>
+                        <field name="applicant_ids" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button name="action_lost_interest_apply" string="Submit" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="applicant_lost_interest_action" model="ir.actions.act_window">
+            <field name="name">Lost Interest Reason</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">applicant.lost.interest.reason</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="applicant_lost_interest_reason_view_form"/>
+            <field name="target">new</field>
+        </record>
+        
+        
+        
+         <record id="applicant_not_matching_reason_view_form" model="ir.ui.view">
+            <field name="name">applicant.not.matching.reason.form</field>
+            <field name="model">applicant.not.matching.reason</field>
+            <field name="arch" type="xml">
+                <form string="Lost Interest Reason">
+                    <group class="oe_title">
+                        <field name="not_matching_criteria_reason_id"/>
+                        <field name="applicant_ids" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button name="action_not_matching_apply" string="Submit" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="applicant_not_matching_reason_action" model="ir.actions.act_window">
+            <field name="name">Not Matching Criteria</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">applicant.not.matching.reason</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="applicant_not_matching_reason_view_form"/>
+            <field name="target">new</field>
+        </record>
+        
+        
+        <record id="applicant_no_show_reason_view_form" model="ir.ui.view">
+            <field name="name">applicant.no.show.reason.form</field>
+            <field name="model">applicant.no.show.reason</field>
+            <field name="arch" type="xml">
+                <form string="No Show Reason">
+                    <group class="oe_title">
+                        <field name="no_show_reason_id"/>
+                        <field name="applicant_ids" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button name="action_no_show_apply" string="Submit" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+
+        <record id="applicant_no_show_action" model="ir.actions.act_window">
+            <field name="name">No Show Reason</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">applicant.no.show.reason</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="applicant_no_show_reason_view_form"/>
+            <field name="target">new</field>
+        </record>
+        <record id="applicant_lost_interest_action_r" model="ir.actions.act_window">
+            <field name="name">Lost Interest Reason</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.applicant.lost.interest.reason</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+     <record id="applicant_not_matching_reason_action_r" model="ir.actions.act_window">
+            <field name="name">Not Matching Criteria</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.applicant.not.matching.reason</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+     
+     
+        
+        
+        <record id="applicant_no_show_action_r" model="ir.actions.act_window">
+            <field name="name">No Show Reason</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.applicant.no.show.reason</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+        
+        
+         <record id="applicant_sector" model="ir.actions.act_window">
+            <field name="name">Sectors</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sector.sector</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+        
+        
+         <record id="applicant_work_locations" model="ir.actions.act_window">
+            <field name="name">Work Locations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">work.locations</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+        
+        
+        
+        <record id="applicant_work_scope" model="ir.actions.act_window">
+            <field name="name">Scopes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rcc.scope</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+        
+        <record id="applicant_work_rcc_projects" model="ir.actions.act_window">
+            <field name="name">Projects</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rcc.project</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+        
+        
+        <record id="applicant_lang_levels" model="ir.actions.act_window">
+            <field name="name">Language Level</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">lang.levels</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem id="menu_RCC_reasons"  parent="hr_recruitment.menu_hr_recruitment_configuration"/>
+        
+        <menuitem
+             id="menu_applicant_no_show_action"
+             sequence="10"
+             parent="hr_recruitment.menu_hr_recruitment_configuration"
+             action="applicant_no_show_action_r"
+         />
+        
+        <menuitem
+             id="menu_applicant_lang_levels"
+             sequence="10"
+             parent="menu_RCC_reasons"
+             action="applicant_lang_levels"
+         />
+        
+        
+        
+        <menuitem id="menu_RCC_configs"  parent="hr_recruitment.menu_hr_recruitment_configuration"/>
+        <menuitem
+                 
+             id="menu_applicant_no_work_rcc_projects"
+             sequence="10"
+             parent="hr_recruitment.menu_hr_recruitment_configuration"
+             action="applicant_work_rcc_projects"
+         />
+        <menuitem
+                id="menu_applicant_not_matching_reason_action_r"
+                sequence="10"
+                parent="hr_recruitment.menu_hr_recruitment_configuration"
+                action="applicant_not_matching_reason_action_r"
+         />
+        <menuitem
+             id="menu_applicant_no_work_Scope"
+             sequence="10"
+             parent="hr_recruitment.menu_hr_recruitment_configuration"
+             action="applicant_work_scope"
+         />
+        <menuitem
+             id="menu_applicant_no_work_locations"
+             sequence="10"
+             parent="hr_recruitment.menu_hr_recruitment_configuration"
+             action="applicant_work_locations"
+         />
+        <menuitem
+             id="menu_applicant_no_show_sectors"
+             sequence="10"
+             parent="hr_recruitment.menu_hr_recruitment_configuration"
+             action="applicant_sector"
+         />
+        <menuitem  id="menu_applicant_lost_interest"
+                sequence="10"
+                parent="hr_recruitment.menu_hr_recruitment_configuration"
+                action="applicant_lost_interest_action_r" />
+</odoo>

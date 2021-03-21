@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_screening_questions_screening_questions,screening_questions.screening_questions,model_screening_questions,hr_recruitment.group_hr_recruitment_manager,1,1,1,1
+access_screening_application_screening_application,screening_application.screening_application,model_screening_application,hr_recruitment.group_hr_recruitment_manager,1,1,1,1

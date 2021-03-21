@@ -1,0 +1,431 @@
+<?xml version="1.0" ?>
+<!-- Copyright 2018-2019 ForgeFlow, S.L.x
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0) -->
+<odoo>
+	<record id="view_hr_dept_project" model="ir.ui.view">
+		<field name="name">view_hr_dept_project</field>
+		<field name="model">hr.department</field>
+		<field name="inherit_id" ref="hr.view_department_form" />
+		<field name="arch" type="xml">
+			<field name="manager_id" position="after">
+				<field name="raya_department" widget="boolean_toggle"/>
+			</field>
+			<xpath expr="//form/sheet" position="inside">
+				<notebook>
+					<page name="project" string="Project" attrs="{'invisible':[('raya_department','=',True)]}">
+						<field name="projects" attrs="{'required':[('raya_department','!=',True)]}"/>
+					</page>
+				</notebook>
+			</xpath>
+    </field>
+  </record>
+	<record id="view_hr_emp_applicat_readonly" model="ir.ui.view">
+		<field name="name">view_hr_emp_applicat_readonly</field>
+		<field name="model">hr.employee</field>
+		<field name="inherit_id" ref="hr.view_employee_form" />
+		<field name="arch" type="xml">
+			<field name="job_id" position="attributes">
+				<attribute name="required">1</attribute>
+			</field>
+    </field>
+  </record>
+  <record id="view_hiring_request_form_ext" model="ir.ui.view">
+		<field name="name">hiring.request.form.ext</field>
+		<field name="model">hiring.request</field>
+		<field name="inherit_id" ref="wc_hiring_request.view_hiring_request_form" />
+		<field name="arch" type="xml">
+			<!-- <field name="center" position="attributes">
+				<attribute name="domain">[('project','=','project')]</attribute>
+			</field> -->
+      <button name="button_approved" position="replace">
+        <button name="button_approved" attrs="{'invisible':['|',('state','!=','draft'),('require_hiring_request_type','=',True)]}" string="Confirm" type="object" class="oe_highlight"/>
+      </button>
+      <button name="button_rejected" position="replace">
+        <button name="button_rejected" attrs="{'invisible':['|','|',('can_approve','=',False),('already_approved','=',True),('state','not in',['draft','director_approved'])]}" string="Reject" type="object" class="oe_highlight"/>
+      </button>
+			<xpath expr="//field[@name='state']" position="before" >
+        <field name="already_approved" invisible="1"/>
+        <field name="is_dept_director" invisible="1"/>
+        <field name="can_approve" invisible="1"/>
+        <field name="already_approved" invisible="1"/>
+        <button name="apprpve_request" string="Department Approve" attrs="{'invisible':['|','|','|',('already_approved','=',True),('is_dept_director','!=',True),('state','!=','draft'),('department_gm_approval_required','=',False)]}" type="object" class="oe_highlight"/>
+				<button name="user_approve" string="Approve" type="object" class="oe_highlight" attrs="{'invisible':['|','|',('already_approved','=',True),('can_approve','!=',True),('state','!=','director_approved')]}"/>
+			</xpath>
+			<xpath expr="//field[@name='state']" position="replace" >
+				<field name="state" widget="statusbar" statusbar_visible="draft,director_approved,approved,done,rejected"/>
+			</xpath>
+			<xpath expr="//field[@name='job']" position="after">
+        <field name="allowed_hiring_request_type" invisible="1"/>
+        <field name="require_hiring_request_type" invisible="1"/>
+				<field name="hiring_request_type" domain="[('id','in',allowed_hiring_request_type)]" attrs="{'required':[('require_hiring_request_type','!=',False)],'readonly':[('state','!=','draft')]}"/>
+			</xpath>
+			<xpath expr="//notebook" position="inside">
+				<page string="Approvals" name="approvals">
+          <group>
+            <group>
+              <field name="department_gm_approval_required" readonly="1" force_save="1"/>
+              <field name="dept_director" readonly="1" force_save="1"/>
+            </group>
+            <group>
+              <field name="department_approved" readonly="1" force_save="1"/>
+              <field name="approvers_approved" readonly="1" force_save="1"/>
+            </group>
+          </group>
+					<field name="hiring_request_approvers" readonly="1" force_save="1">
+						<tree>
+							<field name="name" />
+							<field name="job_id" />
+						</tree>
+					</field>
+          <field name="users_who_approved" invisible="1" readonly="1" force_save="1">
+						<tree>
+							<field name="name" />
+							<field name="job_id" />
+						</tree>
+					</field>
+				</page>
+			</xpath>
+        </field>
+    </record>
+
+
+	<record id="view_hr_recruitment_job_readonly" model="ir.ui.view">
+		<field name="name">view_hr_recruitment_job_readonly</field>
+		<field name="model">hr.job</field>
+		<field name="inherit_id" ref="hr.view_hr_job_form" />
+		<field name="arch" type="xml">
+			<field name="job_category" position="attributes">
+				<attribute name="required">1</attribute>
+				<attribute name="force_save">1</attribute>
+				<attribute name="readonly">1</attribute>
+			</field>
+      <field name="department_id" position="attributes">
+				<attribute name="required">1</attribute>
+			</field>
+      <!-- <field name="alias_name" position="after">
+				<field name="request_approvals" widget="many2many_tags" attrs="{'required':[('job_category','=','talent')],'invisible':[('job_category','!=','talent')]}"/>
+			</field> -->
+      <xpath expr="//notebook" position="inside">
+        <page string="Approvals" name="approvals">
+          <field name="request_approvals">
+            <tree  editable="top">
+              <field name="type"/>
+              <field  name="department_director"  widget="boolean_toggle"/>
+              <field name="position" widget="many2many_tags" />
+            </tree>
+          </field>
+        </page>
+      </xpath>
+    </field>
+  </record>
+	<record id="view_hr_recruitment_source_project_tree" model="ir.ui.view">
+		<field name="name">hr.recruitment.source.tree.project</field>
+		<field name="model">hr.recruitment.source</field>
+		<field name="inherit_id" ref="hr_recruitment.hr_recruitment_source_tree" />
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='job_id']" position="after">
+				<field name="recruiter" />
+				<field name="hiring_request"/>
+                <field name="project" />
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="hiring_request_talent_form_action">
+        <field name="name">Talent Acquisition Hiring Requests</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hiring.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_category':'Talent Acq'}</field>
+     <!--   <field name="search_view_id" ref="view_hiring_request_search" />-->
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click to start a new hiring request process.
+          </p>
+        </field>
+		<field name="domain">[('category','=','Talent Acq')]</field>
+    </record>
+    <record model="ir.actions.act_window" id="hiring_request_form_ope_action">
+        <field name="name">Operational Hiring Requests</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hiring.request</field>
+        <field name="view_mode">tree,form</field>
+				<field name="context">{'default_category':'operational'}</field>
+        <!--<field name="search_view_id" ref="view_hiring_request_search" />-->
+		<field name="domain">[('category','=','operational')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click to start a new hiring request process.
+          </p>
+        </field>
+    </record>
+
+	<!-- <record id="view_hr_job_form_catrgory" model="ir.ui.view">
+		<field name="name">hr.job.form.category</field>
+		<field name="model">hr.job</field>
+		<field name="inherit_id" ref="hr.view_hr_job_form" />
+		<field name="arch" type="xml">
+			<xpath expr="//page[1]/div[1]" position="after">
+				<group>
+					<field name="job_category" />
+				</group>
+			</xpath>
+        </field>
+    </record> -->
+		<!-- <record id="hr_contract_form_employee_enhancement" model="ir.ui.view">
+				<field name="name">hr.job.form.employee.enhancement.inherit</field>
+				<field name="model">hr.job</field>
+				<field name="inherit_id" ref="hr.view_hr_job_form"/>
+				<field name="arch" type="xml">
+						<xpath expr="//field[@name='no_of_recruitment']" position="before">
+							<field name="job_category" />
+						</xpath>
+				</field>
+		</record> -->
+
+	<menuitem
+        id="menu_purchase_request_act_acc"
+        sequence="10"
+				parent="job_category_talent_job_par"
+				groups="wc_ta_extention.system_recruitment_team_talent"
+        action="hiring_request_talent_form_action"
+    />
+
+	<menuitem
+        id="menu_purchase_request_ope_act"
+        sequence="10"
+				parent="job_category_operational_job_par"
+				groups="wc_ta_extention.system_recruitment_team_operational"
+        action="hiring_request_form_ope_action"
+    />
+
+
+
+
+	    <record model="ir.actions.act_window" id="hr_job_talent_form_action">
+        <field name="name">Talent Acquisition Job Positions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.job</field>
+        <field name="view_mode">kanban,tree,form</field>
+				<field name="context">{'default_job_category':'talent'}</field>
+       <field name="view_id" ref="hr_recruitment.view_hr_job_kanban" />
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click to start a new hr job.
+          </p>
+        </field>
+		<field name="domain">[('job_category','=','talent')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="hr_job_form_ope_action">
+        <field name="name">Operational Job Positions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.job</field>
+        <field name="view_mode">kanban,tree,form</field>
+				<field name="context">{'default_job_category':'operational'}</field>
+				<field name="view_id" ref="hr_recruitment.view_hr_job_kanban" />
+		<field name="domain">[('job_category','=','operational')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click to start a new hr job.
+          </p>
+        </field>
+    </record>
+
+	<record id="view_hiring_request_types_tree" model="ir.ui.view">
+        <field name="name">hiring.request.types.tree</field>
+        <field name="model">hiring.request.types</field>
+        <field name="arch" type="xml">
+            <tree string="Hiring Request Types">
+              <field  name="name" />
+              <field  name="description" />
+              <field  name="department_director" />
+              <field name="position" widget ="many2many_tags" />
+            </tree>
+        </field>
+    </record>
+
+	<record id="view_hiring_request_types_form" model="ir.ui.view">
+        <field name="name">hiring.request.types.form</field>
+        <field name="model">hiring.request.types</field>
+        <field name="arch" type="xml">
+            <form string="Hiring Request Types">
+                <sheet>
+                    <div>
+                        <label for="name" />
+                    </div>
+                    <h1>
+                        <field  name="name" />
+                    </h1>
+					<div>
+                        <label for="description" />
+                    </div>
+                    <h3>
+                        <field  name="description" />
+                    </h3>
+                    <div>
+                                  <label for="department_director" />
+                              </div>
+                              <h3>
+                                  <field  name="department_director"  widget="boolean_toggle"/>
+                              </h3>
+					<div>
+                        <label for="position" />
+                    </div>
+                    <h4>
+                         <field name="position" widget ="many2many_tags" />
+                    </h4>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+	<record model="ir.actions.act_window" id="hr_hiring_request_types_action">
+        <field name="name">Hiring Requests Types</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hiring.request.types</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context"></field>
+        <!--<field name="search_view_id" ref="view_hiring_request_search" />-->
+		<!-- <field name="domain">[]</field> -->
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click to start .
+          </p>
+        </field>
+    </record>
+
+	<menuitem
+			id="menu_hr_jobs_act_acc_hr_ty"
+			sequence="10"
+			parent="hr_recruitment.menu_hr_recruitment_configuration"
+			action="hr_hiring_request_types_action"
+		/>
+
+
+		######################## JOB OPPORTUNITIES (menu) ###########################
+		<record model="ir.actions.act_window" id="crm_case_categ0_act_job_talent">
+				<field name="name">Talent Acquisition Applications</field>
+				<field name="res_model">hr.applicant</field>
+				<field name="view_mode">kanban,tree,form,pivot,graph,calendar,activity</field>
+				<field name="view_id" eval="False"/>
+				<field name="search_view_id" ref="hr_recruitment.hr_applicant_view_search_bis"/>
+				<field name="context">{'default_job_category':'talent'}</field>
+				<field name="domain">[('job_category','=','talent')]</field>
+				<field name="help" type="html">
+					<p class="o_view_nocontent_empty_folder">
+						No applications yet
+					</p><p>
+						Odoo helps you track applicants in the recruitment
+						process and follow up all operations: meetings, interviews, etc.
+					</p><p>
+						Applicants and their attached CV are created automatically when an email is sent.
+						If you install the document management modules, all resumes are indexed automatically,
+						so that you can easily search through their content.
+					</p>
+				</field>
+		</record>
+
+
+		######################## JOB OPPORTUNITIES (menu) ###########################
+		<record model="ir.actions.act_window" id="crm_case_categ0_act_job_operational">
+				<field name="name">Operational Applications</field>
+				<field name="res_model">hr.applicant</field>
+				<field name="view_mode">kanban,tree,form,pivot,graph,calendar,activity</field>
+				<field name="view_id" eval="False"/>
+				<field name="search_view_id" ref="hr_recruitment.hr_applicant_view_search_bis"/>
+				<field name="context">{'default_job_category':'operational'}</field>
+				<field name="domain">[('job_category','=','operational')]</field>
+				<field name="help" type="html">
+					<p class="o_view_nocontent_empty_folder">
+						No applications yet
+					</p><p>
+						Odoo helps you track applicants in the recruitment
+						process and follow up all operations: meetings, interviews, etc.
+					</p><p>
+						Applicants and their attached CV are created automatically when an email is sent.
+						If you install the document management modules, all resumes are indexed automatically,
+						so that you can easily search through their content.
+					</p>
+				</field>
+		</record>
+
+
+		<!-- <record id="template_override" model="ir.actions.act_window">
+	         <field name="context">{'search_default': 0}</field>
+	 </record> -->
+
+
+
+	<menuitem
+        id="menu_hr_jobs_act_acc"
+        sequence="10"
+        parent="job_category_talent_job_par"
+				groups="wc_ta_extention.system_recruitment_team_talent"
+        action="hr_job_talent_form_action"
+    />
+
+	<menuitem
+        id="menu_hr_jobs_ope_act"
+        sequence="10"
+        parent="job_category_operational_job_par"
+				groups="wc_ta_extention.system_recruitment_team_operational"
+        action="hr_job_form_ope_action"
+    />
+
+		<menuitem
+	        id="menu_hr_jobs_tal_act_kan"
+	        sequence="10"
+	        parent="job_category_talent_job_par"
+					groups="wc_ta_extention.system_recruitment_team_talent"
+	        action="crm_case_categ0_act_job_talent"
+	    />
+
+			<menuitem
+						id="menu_hr_jobs_op_act_kan"
+						sequence="10"
+						parent="job_category_operational_job_par"
+						groups="wc_ta_extention.system_recruitment_team_operational"
+						action="crm_case_categ0_act_job_operational"
+				/>
+
+	<menuitem
+					id="job_category_operational_job_par"
+					sequence="1"
+					name="Operational Recruitment"
+					groups="wc_ta_extention.system_recruitment_team_operational"
+					action="crm_case_categ0_act_job_operational"
+					parent="hr_recruitment.menu_hr_recruitment_root"
+		/>
+		<record id="job_category_operational_job_par" model="ir.ui.menu">
+			<field name="groups_id" eval="[(6,0,[])]"/>
+		</record>
+		<record id="job_category_operational_job_par" model="ir.ui.menu">
+			<field name="groups_id" eval="[(4, ref('wc_ta_extention.system_recruitment_team_operational'))]"/>
+		</record>
+		<menuitem
+					id="job_category_talent_job_par"
+					sequence="1"
+					name="Talent Acquisition"
+					groups="wc_ta_extention.system_recruitment_team_talent"
+					action="crm_case_categ0_act_job_talent"
+					parent="hr_recruitment.menu_hr_recruitment_root"
+		/>
+		<record id="job_category_talent_job_par" model="ir.ui.menu">
+			<field name="groups_id" eval="[(6,0,[])]"/>
+		</record>
+		<record id="job_category_talent_job_par" model="ir.ui.menu">
+			<field name="groups_id" eval="[(4, ref('wc_ta_extention.system_recruitment_team_talent'))]"/>
+		</record>
+
+		<!-- hr_recruitment.menu_crm_case_categ0_act_job -->
+		<record id="hr_recruitment.menu_crm_case_categ0_act_job" model="ir.ui.menu">
+			<field name="groups_id" eval="[(6,0,[])]"/>
+		</record>
+		<record id="hr_recruitment.menu_crm_case_categ0_act_job" model="ir.ui.menu">
+			<field name="groups_id" eval="[(4, ref('wc_ta_extention.system_recruitment_team_both'))]"/>
+		</record>
+
+
+
+</odoo>

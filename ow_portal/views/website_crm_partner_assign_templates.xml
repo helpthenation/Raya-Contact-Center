@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ######################################### ASSETS ########################################### -->
+    <template id="assets_frontend" inherit_id="website.assets_frontend" name="Skills assets">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/ow_portal/static/src/js/crm_partner_assign.js" />
+        </xpath>
+    </template>
+    <!-- ######################################### ASSETS ########################################### -->
+    
+    
+    <!-- ######################################### DashBoard ######################################## -->
+    <template id="portal_my_home_menu_skills" name="Portal layout : skills menu entry" inherit_id="portal.portal_breadcrumbs" priority="15">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <!-- ######################### Non Technical Skills Box ###########################-->
+            <li t-if="page_name == 'skills' or skills" t-attf-class="breadcrumb-item #{'active ' if not skill else ''}">
+                <a t-if="skills" t-attf-href="/my/skills?{{ keep_query() }}">
+                    Skills
+                </a>
+                <t t-else="">
+                    Skills
+                </t>
+            </li>
+            <!-- ############################ Technical Skills Box ###########################-->
+            <li t-if="page_name == 'tec_skills' or tec_skills" t-attf-class="breadcrumb-item #{'active ' if not skill_id else ''}">
+                <a t-if="tec_skills" t-attf-href="/my/tec_skills?{{ keep_query() }}">
+                    Technical Skills
+                </a>
+                <t t-else="">
+                    Technical Skills
+                </t>
+            </li>
+            <!-- ######################### Languages Skills Box  ############################-->
+            <li t-if="page_name == 'lang_skills' or lang_skills" t-attf-class="breadcrumb-item #{'active ' if not lang_skill else ''}">
+                <a t-if="lang_skills" t-attf-href="/my/lang_skills?{{ keep_query() }}">
+                    Language Skills
+                </a>
+                <t t-else="">
+                    Language Skills
+                </t>
+            </li>
+            <!-- ######################### Languages Skills Box  ############################-->
+            <li t-if="is_emp" t-attf-class="breadcrumb-item #{'active ' if not is_emp else ''}">
+                <a t-if="check_list" t-attf-href="/my/check_list?{{ keep_query() }}">
+                    Check List (Welcome)
+                </a>
+                <t t-else="">
+
+                </t>
+            </li>
+        </xpath>
+    </template>
+    <!-- ################################################################################ -->
+    
+    <!-- ############################## Home Landing Page Links ############################# -->
+    <template id="portal_my_home_skills" name="Show Skills" customize_show="True" inherit_id="portal.portal_my_home" priority="15">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <!-- ################  Non Technical Skills ##################### -->
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Skills</t>
+                <t t-set="url" t-value="'/my/skills'"/>
+                <t t-set="placeholder_count" t-value="'skills_count'"/>
+            </t>
+            <!-- ################  Technical Skills ################# -->
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Technical Skills</t>
+                <t t-set="url" t-value="'/my/tec_skills'"/>
+                <t t-set="placeholder_count" t-value="'tec_skills_count'"/>
+            </t>
+            <!-- ################  Language Skills ################# -->
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Language Skills</t>
+                <t t-set="url" t-value="'/my/lang_skills'"/>
+                <t t-set="placeholder_count" t-value="'lang_skills_count'"/>
+            </t>
+            <!-- ################  Language Skills ################# -->
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Check List (Welcome)</t>
+                <t t-set="url" t-value="'/my/check_list'"/>
+                <t t-set="placeholder_count" t-value="'check_list_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+
+    <!-- ############################## Non Tech Skills Tree Page ######################## -->
+    <template id="portal_my_skills" name="My Skills">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Skills</t>
+            </t>
+			<div class="form-inline ml-lg-4" t-if="request.env.user.partner_id">
+                    <button class="btn btn-success btn-sm" name='new_skills' data-toggle="modal" data-target=".modal_new_skills" title="Add new Skill" aria-label="Add a new Technical Skill">
+                        <i class="fa fa-plus"/> Create New
+                    </button>
+            </div>
+			<div class="modal fade modal_new_skills" role="form">
+                <div class="modal-dialog">
+                    <form method="POST"  t-attf-action="/my/nonskills/create" class="modal-content js_website_submit_form new_skills_form">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <header class="modal-header">
+                            <h4 class="modal-title">New Technical Skills</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body" id="new-tech_skills-dialog">
+                            <div class="form-group">
+                                <label class="col-form-label hdd4" for="skill_id">Skill</label>
+                                <select name="skill_id" t-attf-class="form-control">
+                                    <option value="">Select a Skill...</option>
+                                    <t t-foreach="skills_lst or []" t-as="skillst">
+                                        <option t-att-value="skillst.id" >
+                                            <t t-esc="skillst.name" />
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label h4dd" for="tech_applicant_talent_level">Skill Level</label>
+                                
+                                <select name="nontech_applicant_talent_level" t-attf-class="form-control">
+                                    <option value="">Select Your Level...</option>
+                                    <t t-foreach="levels_lst or []" t-as="levelst">
+                                        <option t-att-value="levelst.id" >
+                                            <t t-esc="levelst.name" />
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                        </main>
+                        <footer class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button t-attf-class="btn btn-primary new_opp_confirm">Confirm</button>
+                        </footer>
+                    </form>
+                </div>
+            </div>
+            <div t-if="not skills" class="alert alert-warning mt8" role="alert">
+                There are no Skills.
+            </div>
+            <t t-if="skills" t-call="portal.portal_table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th class="w-75">Skill Name</th>
+                        <th>Skill Level</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="skills" t-as="nonskills">
+                        <td><span t-field="nonskills.create_date" t-options='{"widget": "date"}' /></td>
+                        <td>
+                          <span t-field="nonskills.skill_id.name"/>
+                        </td>
+                        <td><span t-field="nonskills.nontech_applicant_talent_level" /></td>
+                        <td>
+							<a t-attf-href="/my/non_skills/delete/#{nonskills.id}"  >Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+<!-- ############################## Non Tech Skills Tree Page ######################## -->
+    <template id="portal_my_check_list" name="My Check List">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Check List</t>
+            </t>
+            
+            <div t-if="not is_emp" class="alert alert-warning mt8" role="alert">
+                Sorry You are not allowed to use this section.
+            </div>
+            <div t-if="is_emp" class="alert alert-warning mt8" role="alert">
+                Welcome to our team , kindly follow the steps of boarding and check on every step you finish.
+                Don,t forget to watch video tutorial.
+            </div>
+        </t>
+    </template>
+
+<!-- ############################## Tech Skills Tree Page ######################## -->
+    <template id="portal_my_tec_skills" name="My Technical Skills">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Technical Skills</t>
+
+                <div class="form-inline ml-lg-4" t-if="request.env.user.partner_id">
+                    <button class="btn btn-success btn-sm" name='new_tec_skills' data-toggle="modal" data-target=".modal_new_tec_skills" title="Add an Technical Skills" aria-label="Add a new Technical Skill">
+                        <i class="fa fa-plus"/> Create New
+                    </button>
+                </div>
+            </t>
+
+            <div class="modal fade modal_new_tec_skills" role="form">
+                <div class="modal-dialog">
+                    <form method="POST"  t-attf-action="/my/tec_skills/create" class="modal-content js_website_submit_form new_tec_skills_form">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <header class="modal-header">
+                            <h4 class="modal-title">New Technical Skills</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body" id="new-tech_skills-dialog">
+                            <div class="form-group">
+                                <label class="col-form-label hdd4" for="skill_id">Skill</label>
+                                <select name="skill_id" t-attf-class="form-control">
+                                    <option value="">Select a Technical Skill...</option>
+                                    <t t-foreach="skills_lst or []" t-as="skillst">
+                                        <option t-att-value="skillst.id" >
+                                            <t t-esc="skillst.name" />
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label h4dd" for="tech_applicant_talent_level">Skill Level</label>
+                                
+                                <select name="tech_applicant_talent_level" t-attf-class="form-control">
+                                    <option value="">Select Your Level...</option>
+                                    <t t-foreach="levels_lst or []" t-as="levelst">
+                                        <option t-att-value="levelst.id" >
+                                            <t t-esc="levelst.name" />
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                        </main>
+                        <footer class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button t-attf-class="btn btn-primary new_opp_confirm">Confirm</button>
+                            <!--<input class="btn btn-primary mt8 a-submit" type="submit" value="Post Your Skill"/>-->
+                        </footer>
+                    </form>
+                </div>
+            </div>
+            <t t-if="not tec_skills">
+                <div class="alert alert-warning mt8" role="alert">
+                    There are no Technical Skills.
+                </div>
+            </t>
+            <t t-if="tec_skills" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Date</th>
+                        <th class="w-50">Skill Name</th>
+                        <th>Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="tec_skills" t-as="opp">
+                        <td><span t-field="opp.create_date" t-options='{"widget": "date"}' /></td>
+                        <td>
+                            <span t-field="opp.skill_id.name"/>
+                        </td>
+                        <td><span t-field="opp.tech_applicant_talent_level" /></td>
+                        <td>
+							<a t-attf-href="/my/tec_skills/delete/#{opp.id}" >Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+
+    <!-- ############################## Languages  Skills Tree Page ######################## -->
+    <template id="portal_my_lang_skills" name="My Languages Skills">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Languages</t>
+            </t>
+			<div class="form-inline ml-lg-4" t-if="request.env.user.partner_id">
+                    <button class="btn btn-success btn-sm" name='new_lang_skills' data-toggle="modal" data-target=".modal_new_lang_skills" title="Add new Language" aria-label="Add a new Language">
+                        <i class="fa fa-plus"/> Create New
+                    </button>
+            </div>
+			<div class="modal fade modal_new_lang_skills" role="form">
+                <div class="modal-dialog">
+                    <form method="POST"  t-attf-action="/my/langskills/create" class="modal-content js_website_submit_form new_lang_skills_form">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <header class="modal-header">
+                            <h4 class="modal-title">New Language</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body" id="new-lang_skills-dialog">
+                            <div class="form-group">
+                                <label class="col-form-label hdd4" for="skill_id">Language</label>
+                                <select name="skill_id" t-attf-class="form-control">
+                                    <option value="">Select a Language...</option>
+                                    <t t-foreach="skills_lst or []" t-as="skillst">
+                                        <option t-att-value="skillst.id" >
+                                            <t t-esc="skillst.name" />
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label h4dd" for="lang_applicant_talent_level">Language Level</label>
+                                <select name="lang_applicant_talent_level" t-attf-class="form-control">
+                                    <option value="">Select Your Level (note language code)...</option>
+                                    <t t-foreach="levels_lst or []" t-as="levelst">
+                                        <option t-att-value="levelst.id" >
+                                            <t t-esc="levelst.name" />
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                        </main>
+                        <footer class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button t-attf-class="btn btn-primary new_lang_confirm">Confirm</button>
+                        </footer>
+                    </form>
+                </div>
+            </div>
+            <div t-if="not lang_skills" class="alert alert-warning mt8" role="alert">
+                There are no Languages Yet.
+            </div>
+            <t t-if="lang_skills" t-call="portal.portal_table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th class="w-75">Language</th>
+                        <th>Level</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="lang_skills" t-as="langskills">
+                        <td><span t-field="langskills.create_date" t-options='{"widget": "date"}' /></td>
+                        <td>
+                          <span t-field="langskills.skill_id.name"/>
+                        </td>
+                        <td><span t-field="langskills.lang_applicant_talent_level" /></td>
+                        <td>
+							<a t-attf-href="/my/lang_skills/delete/#{langskills.id}"  >Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+
+<!-- ############################## Non Technical Skills Tree Page ######################## -->
+    <template id="portal_my_skill" name="My Skill">
+        <t t-call="portal.portal_layout">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4>
+                                Skill - <span t-field="skill.skill_id.name"/>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+							<div class="row" >
+                                <label class="col-4">Skill Name</label>
+								<div>
+                                    <span t-field="skill.skill_id.name"/>
+                                </div>
+                            </div>
+                            <div class="row" >
+                                <label class="col-4">Level</label>
+								<div>
+                                    <span t-field="skill.nontech_applicant_talent_level"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+
+</odoo>

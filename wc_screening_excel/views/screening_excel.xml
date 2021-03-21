@@ -1,0 +1,182 @@
+<odoo>
+  <data>
+
+    <record id="hr_applicant_form_excel" model="ir.ui.view">
+        <field name="name">hr.applicant.form.excel</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_skill_qualification.view_hr_applicant_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//notebook" position="inside">
+              <page string="Excel Test" name="excel_test" attrs="{'invisible':[('excel_check','=',False)]}">
+                <group>
+                  <group>
+                  <field name="excel_check" invisible='1'/>
+                  <field name="skill_id"  force_save="1" readonly='1'/>
+                </group>
+              </group>
+                  <field name="excel_line_ids" nolabel="1" >
+                    <tree editable="bottom" create="false"  delete="false">
+                      <field name="question" force_save="1" readonly='1'/>
+                      <field name="mark" force_save="1" readonly='1' string="Benchmark" sum="mark"/>
+                      <field name="new_mark" string="Mark" sum="new_mark"/>
+                    </tree>
+                  </field>
+                  <group>
+                    <group>
+                      <field name="skill_level_id" force_save="1" readonly='1'/>
+                    </group>
+                    <group>
+                      <!-- <field name="total" class="float-right" readonly="1" force_save="1"/> -->
+                      <button name="compute_level" class="float-right btn btn-primary" type="object" string="Result" />
+                  </group>
+                </group>
+              </page>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <!-- <record id="hr_employee_form_excel" model="ir.ui.view">
+        <field name="name">hr.employee.form.excel</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//notebook" position="inside">
+              <page string="Excel Test" name="excel_test" attrs="{'invisible':[('excel_check','=',False)]}">
+                <group>
+                  <group>
+                    <field name="excel_check" invisible='1'/>
+                    <field name="skill_id"  force_save="1" readonly='1'/>
+                  </group>
+                </group>
+                  <field name="excel_line_ids" nolabel="1" >
+                    <tree editable="bottom" create="false"  delete="false">
+                      <field name="name" force_save="1" readonly='1'/>
+                      <field name="mark" force_save="1" readonly='1' string="Benchmark"/>
+                      <field name="new_mark" string="Mark"  force_save="1" readonly='1' sum="new_mark"/>
+                    </tree>
+                  </field>
+                  <group>
+                    <group>
+                      <field name="skill_level_id"  force_save="1" readonly='1'/>
+                    </group>
+                    <group>
+                      <field name="total" class="float-right" readonly="1" force_save="1"/>
+                  </group>
+                </group>
+              </page>
+            </xpath>
+
+        </field>
+    </record> -->
+
+    <record id="hr_job_form_excel" model="ir.ui.view">
+        <field name="name">hr.job.form.excel.inherit</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//sheet/div[@class='oe_title']" position="after">
+              <group>
+              <group>
+                <field name="excel_check"/>
+                <field name="excel_test" attrs="{'invisible':[('excel_check','=',False)], 'required':[('excel_check','=',True)]}" />
+              </group>
+              </group>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+              <page string="Excel Test" name="excel_test" attrs="{'invisible':[('excel_check','=',False)]}">
+                  <group>
+                    <group>
+                      <field name="skill_id" readonly="1" force_save="1"/>
+                    </group>
+                  </group>
+
+
+
+
+                  <group>
+                    <group>
+                    <field name="excel_line_ids" nolabel="1" widget="many2many">
+                    <tree editable="bottom" create="false"  delete="false">
+                        <field name="question" readonly="1" force_save="1"/>
+                        <field name="mark" readonly="1" force_save="1" sum="mark"/>
+                    </tree>
+                  </field>
+                  <!-- <field name="total" class="float-right" readonly="1" force_save="1"/> -->
+
+                </group>
+              </group>
+
+              </page>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="hr_excel_test_list">
+      <field name="name">Hr Excel Test</field>
+      <field name="model">hr.excel.test</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="skill_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_excel_test_form">
+        <field name="name">Hr Excel Test</field>
+        <field name="model">hr.excel.test</field>
+        <field name="arch" type="xml">
+            <form string="Hr Excel Test">
+              <sheet>
+                <group>
+                  <group>
+                    <field name="name" required="1"/>
+                    <field name="skill_id" required="1"/>
+                  </group>
+                </group>
+                <group>
+                  <field name="excel_line_ids" nolabel="1" >
+                  <tree editable="bottom" >
+                      <field name="question" required="1"/>
+                      <field name="mark" required="1" sum="mark"/>
+                  </tree>
+                </field>
+
+                  <!-- <group>
+                    <field name="total" readonly="1" force_save="1"/>
+                  </group> -->
+
+                </group>
+              </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="hr_excel_test_action_window">
+      <field name="name">Hr Excel Test</field>
+      <field name="res_model">hr.excel.test</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context"></field>
+      <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+          Click to start add new Hr Excel Test.
+        </p>
+      </field>
+    </record>
+
+    <!-- menu categories -->
+    <menuitem name="Excel Test" id="hr_excel_test_menu" parent="hr_recruitment.menu_hr_recruitment_configuration"
+      action="hr_excel_test_action_window"/>
+
+  </data>
+</odoo>

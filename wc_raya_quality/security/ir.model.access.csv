@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_applicant_quality,applicant_quality.applicant_quality,hr_recruitment.model_hr_applicant,quality_team,1,1,1,1

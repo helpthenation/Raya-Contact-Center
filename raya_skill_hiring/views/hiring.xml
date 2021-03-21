@@ -1,0 +1,138 @@
+<odoo>
+  <data>
+
+      <record id="raya_skill_hire_form_hiring_request_talent" model="ir.ui.view">
+          <field name="name">raya.skill.hire.form.hiring.request.talent</field>
+          <field name="model">hiring.request</field>
+          <field name="inherit_id" ref="wc_hiring_request.view_hiring_request_form"/>
+          <field name="arch" type="xml">
+              <xpath expr="//form/sheet" position="inside">
+                <notebook>
+                 <page name="hr_skills" string="Non Technical Skills" attrs="{'invisible':[('category','=','Talent Acq')]}">
+                    <separator string="Non Technical Skills"/>
+                    <field name="nontechskill_ids">
+                      <tree editable="bottom">
+                         <field name="nontech_id" required="True"/>
+                         <field name="levels" required="True"/>
+                      </tree>
+                    </field>
+                 </page>
+                 <page name="hr_skills" string="Technical Skills" attrs="{'invisible':[('category','=','Talent Acq')]}">
+                  <separator string="Technical Skills"/>
+                  <field name="techskill_ids">
+                    <tree editable="bottom">
+                       <field name="tech_id" required="True"/>
+                       <field name="levels" required="True"/>
+                    </tree>
+                  </field>
+                 </page>
+                 <page name="lang_level_pg" string="Language Levels" attrs="{'invisible':[('category','=','Talent Acq')]}">
+                  <separator string="Language Skills Level"/>
+                  <field name="language_level_ids">
+                     <tree editable="bottom">
+                      <field name="tech_id" string="Language"/>
+                      <field name="levels" string="Language Level"/>
+                     </tree>
+                  </field>
+                  </page>
+
+                <page name="hr_skills_talent" string="Non Technical Skills" attrs="{'invisible':[('category','!=','Talent Acq')]}">
+                    <field name="category" invisible="1"/>
+                    <field name="nontech" invisible="1" />
+                    <separator string="Non Technical Skills"/>
+                    <field name="nontechskill_talent_ids" context="{'default_skill_type_id': parent.nontech}">
+                      <tree editable="bottom">
+                        <field name="skill_type_id" invisible="1" required="True"/>
+                         <field name="skill_id" required="True"/>
+                         <field name="skill_level_id" required="True"/>
+                      </tree>
+                    </field>
+                </page>
+                <page name="tech_skills_talent" string="Technical Skills" attrs="{'invisible':[('category','!=','Talent Acq')]}">
+                  <field name="tech"  invisible="1"/>
+                  <separator string="Technical Skills"/>
+                  <field name="techskill_talent_ids" context="{'default_skill_type_id': parent.tech}">
+                    <tree editable="bottom">
+                      <field name="skill_type_id" invisible="1" required="True"/>
+                       <field name="skill_id" required="True"/>
+                       <field name="skill_level_id" required="True"/>
+                    </tree>
+                  </field>
+                </page>
+                <page name="lang_level_talent" string="Language Levels" attrs="{'invisible':[('category','!=','Talent Acq')]}">
+                  <field name="lang" invisible="1"/>
+                  <separator string="Language Skills Level"/>
+                  <field name="language_level_talent_ids" context="{'default_skill_type_id': parent.lang}">
+                     <tree editable="bottom">
+                       <field name="skill_type_id" invisible="1" string="Language"/>
+                        <field name="skill_id" string="Language" required="True"/>
+                        <field name="skill_level_id" string="Language Level" required="True"/>
+                     </tree>
+                  </field>
+                </page>
+
+                 <page name="hr_qualification" string="Qualifications">
+                     <separator string="Educational Qualification"/>
+                     <field name="education_ids">
+                         <tree>
+                             <field name="type_id"/>
+                             <field name="institute_id"/>
+                             <field name="score"/>
+                             <field name="qualified_year"/>
+                             <field name="doc"/>
+                         </tree>
+                         <form>
+                             <group col="4">
+                               <field name="type_id" required="True"/>
+                                   <field name="institute_id"/>
+                                   <field name="score"/>
+                                   <field name="qualified_year"/>
+                                   <field name="doc"/>
+                             </group>
+                         </form>
+                     </field>
+                     <separator string="Certifications"/>
+                     <field name="certification_ids">
+                         <tree>
+                             <field name="course_id"/>
+                             <field name="levels"/>
+                             <field name="year"/>
+                             <field name="doc"/>
+                         </tree>
+                         <form>
+                             <group col="4">
+                                 <field name="course_id" required="True"/>
+                                     <field name="levels" required="True"/>
+                                     <field name="year"/>
+                                     <field name="doc"/>
+                             </group>
+                         </form>
+                     </field>
+                     <separator string="Professional Experience"/>
+                     <field name="profession_ids">
+                         <tree>
+                             <field name="job_id"/>
+                             <field name="location"/>
+                             <field name="period"/>
+                             <field name="doc"/>
+                         </tree>
+                         <form>
+                             <group col="4">
+                                 <field name="job_id" invisible="1"/>
+                               <field name="location"/>
+                               <field name="period" required="True"/>
+
+                               <field name="doc"/>
+                             </group>
+                         </form>
+                     </field>
+                 </page>
+                </notebook>
+              </xpath>
+
+
+          </field>
+      </record>
+
+  </data>
+</odoo>

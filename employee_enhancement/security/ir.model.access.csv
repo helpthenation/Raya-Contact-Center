@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_grade,employee.grade,model_employee_grade,base.group_user,1,1,1,1
+access_head_count,head.count,model_head_count,base.group_user,1,1,1,1
+access_head_count_line,head.count.line,model_head_count_line,base.group_user,1,1,1,1
+access_employee_misconduct,employee.misconduct,model_employee_misconduct,base.group_user,1,1,1,1
+access_employee_misconduct_line,employee.misconduct.line,model_employee_misconduct_line,base.group_user,1,1,1,1

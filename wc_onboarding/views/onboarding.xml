@@ -1,0 +1,669 @@
+<odoo>
+  <data>
+  <!-- schadule meeting wizard -->
+
+  <record id="view_create_onboarding_meeting" model="ir.ui.view">
+            <field name="name">create.onboarding.meeting.name</field>
+            <field name="model">onboarding_meeting.date</field>
+            <field name="arch" type="xml">
+                <form string="Meeting">
+                    <group>
+                        <field name="start_date"/>
+                    </group>
+                    <footer>
+                        <button name="get_data" string="Create Meeting"
+                          type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                   </footer>
+                </form>
+            </field>
+        </record>
+        <record id="open_wizard_onboarding_meeting_action_id" model="ir.actions.act_window">
+         <field name="name">Create Meeting</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">onboarding_meeting.date</field>
+         <field name="view_mode">form</field>
+         <field name="target">new</field>
+         </record>
+         <!-- actio calender event -->
+         <record id="action_calendar_event" model="ir.actions.act_window">
+        <field name="name">Meetings</field>
+        <field name="res_model">calendar.event</field>
+        <field name="view_mode">calendar,tree,form</field>
+        <field name="view_id" ref="calendar.view_calendar_event_calendar"/>
+        <field name="search_view_id" ref="calendar.view_calendar_event_search"/>
+        <field name="domain">[('onboarding_id', '=', active_id)]</field>
+        <field name="context">{
+                'search_default_onboarding_id': [active_id],
+                'default_onboarding_id': active_id,
+            }</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Schedule a new meeting
+          </p>
+        </field>
+    </record>
+      <!-- Onboarding -->
+
+      <record id="view_onboarding_onboarding_form" model="ir.ui.view">
+          <field name="name">view.onboarding.onboarding.form</field>
+          <field name="model">onboarding.onboarding</field>
+          <field name="arch" type="xml">
+              <form>
+                <header>
+                  <button name="start_onboarding" class="btn btn-primary" type="object" string="Start Onboarding" attrs="{'invisible':[('is_draft','!=',True)]}"/>
+                  <button name="send_email" class="btn btn-primary" type="object" string="Send Email" attrs="{'invisible':['|',('is_in_progress','!=',True),('is_email','!=',True)]}"/>
+                  <button name="online_share" class="btn btn-primary" type="object" string="Online Share" attrs="{'invisible':['|',('is_in_progress','!=',True),('is_online_share','!=',True)]}"/>
+                  <field name="stage_id" widget="statusbar" options="{'clickable': '1'}" />
+                 </header>
+                <sheet>
+                 <div class="oe_button_box" name="button_box">
+<button class="oe_stat_button" icon="fa-calendar" name="%(action_calendar_event)d" type="action" attrs="{'invisible': [('meeting_count', '=', 0)]}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Meeting</span>
+                        <field name="meeting_count"/>
+                    </div>
+                  </button>
+                  </div>
+                  <group>
+                    <group>
+                      <field name="name" required="True" attrs="{'readonly':[('stage_id','!=',False),('is_draft','!=',True)]}"/>
+                      <field name="stage_id_new" invisible="True"/>
+                      <field name="stage_id_old" invisible="True"/>
+                    </group>
+                  </group>
+                  <group>
+                    <group>
+                      <field name="employee_id" required="True" attrs="{'readonly':[('stage_id','!=',False),('is_draft','!=',True)]}"/>
+                      <field name="is_draft" invisible="True"/>
+                      <field name="is_in_progress" invisible="True"/>
+                      <field name="is_done" invisible="True"/>
+                    </group>
+                    <group>
+                      <field name="user_id" readonly="True" force_save="1"/>
+                      <field name="email" readonly="True" force_save="1" widget="email"/>
+                      <field name="job_id" readonly="True" force_save="1"/>
+                    </group>
+                  </group>
+                  <group>
+                    <group>
+                      <field name="onboarding_plan" readonly="1" force_save="1"/>
+                    </group>
+                  </group>
+                  <!-- <group>
+                    <group>
+                      <field name="application_on" invisible="True"/>
+                      <field name="grade_ids" attrs="{'invisible':[('application_on','!=','grade')]}" widget="many2many_tags"/>
+                      <field name="position_ids" attrs="{'invisible':[('application_on','!=','position')]}" widget="many2many_tags"/>
+                    </group>
+                  </group> -->
+                  <group>
+                    <group>
+                      <field name="is_grade_6"/>
+                      <field name="is_meetings"/>
+                      <field name="is_options"/>
+                    </group>
+                    <group>
+                      <field name="is_entry_checklist"/>
+                      <field name="is_email"/>
+                      <field name="is_online_share"/>
+                    </group>
+                  </group>
+
+                  <notebook>
+        						<page name="g6_checklist" string="G6 Checklist" attrs="{'invisible':[('is_grade_6','=',False)]}">
+                      <!-- <field name="is_grade_6" invisible="1"/> -->
+
+        							<field name="grade_6_ids">
+        								<tree editable="bottom" delete="false" create="false">
+                          <field name="name" string="Description" readonly="1" force_save="1"/>
+        									<field name="done" attrs="{'column_invisible':[('parent.is_draft','=',True)],'readonly':[('parent.is_done','=',True)]}"/>
+        								</tree>
+        								<form>
+        									<group col="4">
+                            <field name="name" string="Description" readonly="1" force_save="1"/>
+                            <field name="done" attrs="{'readonly':[('parent.is_done','=',True)]}"/>
+        									</group>
+        								</form>
+        							</field>
+        						</page>
+        						<page name="entry_checklist" string="Entry Checklist" attrs="{'invisible':[('is_entry_checklist','=',False)]}">
+                      <!-- <field name="is_entry_checklist" invisible="1"/> -->
+                    	<field name="entry_checklist_ids">
+        								<tree editable="bottom" delete="false" create="false">
+        									<field name="name" string="Description" readonly="1" force_save="1"/>
+        									<field name="type" readonly="1" force_save="1"/>
+        									<field name="done" attrs="{'column_invisible':[('parent.is_draft','=',True)],'readonly':[('parent.is_done','=',True)]}"/>
+        								</tree>
+        								<form>
+        									<group col="4">
+                            <field name="name" string="Description" readonly="1" force_save="1"/>
+          									<field name="type" readonly="1" force_save="1"/>
+                            <field name="done" attrs="{'readonly':[('parent.is_done','=',True)]}"/>
+        									</group>
+        								</form>
+        							</field>
+        						</page>
+
+
+                    <page name="meetings" string="Meetings" attrs="{'invisible':[('is_meetings','=',False)]}">
+        							<field name="meetings_ids">
+        								<tree editable="bottom" delete="false" create="false">
+        									<field name="name" readonly="1" force_save="1"/>
+        									<field name="description" readonly="1" force_save="1"/>
+                          <field name="date" readonly="1" force_save="1"/>
+        									<field name="done" attrs="{'column_invisible':[('parent.is_draft','=',True)],'readonly':[('parent.is_done','=',True)]}"/>
+<button name="%(open_wizard_onboarding_meeting_action_id)d" type="action" string="Schedule" class="oe_highlight" attrs="{'column_invisible':[('parent.is_in_progress','!=',True)]}"/>
+                      								</tree>
+        								<form>
+        									<group col="4">
+                            <field name="name" readonly="1" force_save="1"/>
+          									<field name="description" readonly="1" force_save="1"/>
+                            <field name="date" readonly="1" force_save="1"/>
+                            <field name="done" attrs="{'readonly':[('parent.is_done','=',True)]}"/>
+        									</group>
+        								</form>
+        							</field>
+        						</page>
+                    <page name="options" string="Options" attrs="{'invisible':[('is_options','=',False)]}">
+                      <field name="options_ids">
+                        <tree editable="bottom" delete="false" create="false">
+        									<field name="name" readonly="1" force_save="1"/>
+        									<field name="description" readonly="1" force_save="1"/>
+                          <field name="select"/>
+                        </tree>
+                        <form>
+                          <group col="4">
+          									<field name="name" readonly="1" force_save="1"/>
+          									<field name="description" readonly="1" force_save="1"/>
+                            <field name="select"/>
+                          </group>
+                        </form>
+                      </field>
+                    </page>
+
+                    <page name="email" string="Email" attrs="{'invisible':[('is_email','=',False)]}">
+        							<field name="email_ids">
+        								<tree editable="bottom" delete="false" create="false">
+        									<field name="name" readonly="1" force_save="1"/>
+                          <field name="type" readonly="1" force_save="1"/>
+                          <field name="attachment" widget="many2many_binary" attrs="{'readonly':[('type','=','video')]}" readonly="1" force_save="1" />
+                          <!-- <field name="attachment" attrs="{'readonly':[('type','=','video')]}" readonly="1" force_save="1"/> -->
+        									<field name="url" attrs="{'readonly':[('type','!=','video')]}" readonly="1" force_save="1"/>
+        								</tree>
+        								<form>
+        									<group col="4">
+          									<field name="name" readonly="1" force_save="1"/>
+                            <field name="type" readonly="1" force_save="1"/>
+        									</group>
+        								</form>
+        							</field>
+        						</page>
+
+                    <page name="online_share" string="Online Share" attrs="{'invisible':[('is_online_share','=',False)]}">
+        							<field name="online_share_ids">
+        								<tree editable="bottom" delete="false" create="false">
+        									<field name="name" readonly="1" force_save="1"/>
+                          <field name="type" readonly="1" force_save="1"/>
+                          <field name="attachment" widget="many2many_binary" attrs="{'readonly':[('type','=','video')]}" readonly="1" force_save="1" />
+                          <!-- <field name="attachment" attrs="{'readonly':[('type','=','video')]}" readonly="1" force_save="1"/> -->
+        									<field name="url" attrs="{'readonly':[('type','!=','video')]}" readonly="1" force_save="1"/>
+        								</tree>
+        								<form>
+        									<group col="4">
+          									<field name="name" readonly="1" force_save="1"/>
+                            <field name="type" readonly="1" force_save="1"/>
+        									</group>
+        								</form>
+        							</field>
+        						</page>
+
+                  </notebook>
+
+                </sheet>
+                <div class="oe_chatter">
+                  <field name="message_follower_ids"/>
+                  <field name="activity_ids"/>
+                  <field name="message_ids" options="{'open_attachments': True}"/>
+                </div>
+              </form>
+          </field>
+      </record>
+
+      <record id="view_onboarding_onboarding_tree" model="ir.ui.view">
+          <field name="name">view.onboarding.onboarding.tree</field>
+          <field name="model">onboarding.onboarding</field>
+          <field name="arch" type="xml">
+              <tree>
+                <field name="name"/>
+                <field name="stage_id"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="view_onboarding_onboarding_kanban" model="ir.ui.view">
+          <field name="name">view.onboarding.onboarding.kanban</field>
+          <field name="model">onboarding.onboarding</field>
+          <field name="arch" type="xml">
+              <kanban string="Dashboard" default_group_by="stage_id" class="o_kanban_applicant" sample="1">
+                  <field name="stage_id" options='{"group_by_tooltip": {"requirements": "Requirements"}}'/>
+                  <field name="name"/>
+                  <field name="priority"/>
+                  <field name="user_id"/>
+                  <field name="employee_id"/>
+                  <field name="job_id"/>
+                  <field name="email"/>
+                  <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                          <div class="o_dropdown_kanban dropdown">
+                              <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Dropdown menu" data-display="static">
+                                  <span class="fa fa-ellipsis-v"/>
+                              </a>
+                              <div class="dropdown-menu" role="menu">
+                                  <t t-if="widget.deletable"><a role="menuitem" type="delete" class="dropdown-item">Delete</a></t>
+                                  <div role="separator" class="dropdown-divider"></div>
+                                  <ul class="oe_kanban_colorpicker text-center" data-field="color"/>
+                              </div>
+                          </div>
+                          <div class="oe_kanban_content">
+                              <div class="o_kanban_record_top">
+                                  <div class="o_kanban_record_headings">
+                                    <i class="o_kanban_record_title"><field name="name"/></i><br/>
+                                    <div class="o_kanban_record_subtitle" invisible="context.get('search_default_job_id', False)">
+                                          <field name="employee_id"/>
+                                          <br/>
+                                          <field name="job_id"/>
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="o_kanban_record_bottom mt4">
+                                  <div class="oe_kanban_bottom_left">
+                                      <div class="float-left mr4" groups="base.group_user">
+                                          <field name="priority" widget="priority"/>
+                                      </div>
+                                      <div class="o_kanban_inline_block mr8">
+                                          <field name="activity_ids" widget="kanban_activity"/>
+                                      </div>
+                                  </div>
+                                  <div class="oe_kanban_bottom_right">
+                                      <!-- <a name="action_get_attachment_tree_view" type="object">
+                                          <span title='Documents'><i class='fa fa-paperclip' role="img" aria-label="Documents"/>
+                                              <t t-esc="record.attachment_number"/>
+                                          </span>
+                                      </a> -->
+                                      <field name="user_id" widget="many2one_avatar_user"/>
+                                  </div>
+
+                              </div>
+                          </div>
+                          <div class="oe_clear"></div>
+                        </div>
+                    </t>
+                </templates>
+              </kanban>
+          </field>
+      </record>
+
+      <record id="action_onboarding_onboarding_window" model="ir.actions.act_window">
+          <field name="name">Dashboard</field>
+          <field name="res_model">onboarding.onboarding</field>
+          <field name="view_mode">kanban,tree,form</field>
+      </record>
+
+
+      <!-- Onboarding Stage -->
+      <record id="view_onboarding_stage_form" model="ir.ui.view">
+          <field name="name">view.onboarding.stage.form</field>
+          <field name="model">onboarding.stage</field>
+          <field name="arch" type="xml">
+              <form>
+                <sheet>
+                  <group>
+                    <group>
+                        <field name="name" required="True"/>
+                        <field name="sequence" required="True"/>
+                    </group>
+                    <group>
+                        <field name="draft"/>
+                        <field name="in_progress"/>
+                        <field name="done"/>
+                    </group>
+                  </group>
+                </sheet>
+              </form>
+          </field>
+      </record>
+
+      <record id="view_onboarding_stage_tree" model="ir.ui.view">
+          <field name="name">view.onboarding.stage.tree</field>
+          <field name="model">onboarding.stage</field>
+          <field name="arch" type="xml">
+              <tree >
+                <field name="name"/>
+                <field name="sequence"/>
+                <field name="draft"/>
+                <field name="in_progress"/>
+                <field name="done"/>
+                
+              </tree>
+          </field>
+      </record>
+
+      <record id="action_onboarding_stage_window" model="ir.actions.act_window">
+          <field name="name">Stages</field>
+          <field name="res_model">onboarding.stage</field>
+          <field name="view_mode">tree,form</field>
+      </record>
+
+
+      <!-- Onboarding Checklists -->
+      <record id="view_onboarding_checklists_form" model="ir.ui.view">
+          <field name="name">view.onboarding.checklists.form</field>
+          <field name="model">onboarding.checklists</field>
+          <field name="arch" type="xml">
+              <form>
+                <sheet>
+                  <group>
+                    <group>
+                      <field name="name" required="True"/>
+                    </group>
+                  </group>
+                  <group>
+                    <group>
+                      <field name="is_grade_6"/>
+                      <field name="is_entry_checklist"/>
+                    </group>
+                  </group>
+                  <notebook>
+        						<page name="g6_checklist" string="G6 Checklist" attrs="{'invisible':[('is_grade_6','!=',True)]}">
+        							<field name="grade_6_ids">
+        								<tree editable="bottom">
+        									<field name="name" string="Description"/>
+        								</tree>
+        								<form>
+        									<group col="4">
+                            <field name="name" string="Description"/>
+        									</group>
+        								</form>
+        							</field>
+        						</page>
+        						<page name="entry_checklist" string="Entry Checklist" attrs="{'invisible':[('is_entry_checklist','!=',True)]}">
+        							<field name="entry_checklist_ids">
+        								<tree editable="bottom">
+        									<field name="name" string="Description"/>
+        									<field name="type"/>
+        								</tree>
+        								<form>
+        									<group col="4">
+                            <field name="name" string="Description"/>
+          									<field name="type"/>
+        									</group>
+        								</form>
+        							</field>
+        						</page>
+                  </notebook>
+                </sheet>
+              </form>
+          </field>
+      </record>
+
+      <record id="view_onboarding_checklists_tree" model="ir.ui.view">
+          <field name="name">view.onboarding.checklists.tree</field>
+          <field name="model">onboarding.checklists</field>
+          <field name="arch" type="xml">
+              <tree >
+                <field name="name"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="action_onboarding_checklists_window" model="ir.actions.act_window">
+          <field name="name">Onboarding Checklists</field>
+          <field name="res_model">onboarding.checklists</field>
+          <field name="view_mode">tree,form</field>
+      </record>
+
+
+      <!-- Onboarding Plans -->
+      <record id="view_onboarding_plans_form" model="ir.ui.view">
+          <field name="name">view.onboarding.plans.form</field>
+          <field name="model">onboarding.plans</field>
+          <field name="arch" type="xml">
+              <form>
+                <sheet>
+                  <group>
+                    <group>
+                      <field name="name" required="True"/>
+                      <field name="application_on" required="True"/>
+                    </group>
+                  </group>
+                  <group>
+                    <group>
+                      <field name="grade_ids" attrs="{'invisible':[('application_on','!=','grade')]}" widget="many2many_tags"/>
+                      <field name="position_ids" attrs="{'invisible':[('application_on','!=','position')]}" widget="many2many_tags"/>
+                    </group>
+                  </group>
+                  <group>
+                    <group>
+                      <field name="checklists"/>
+                      <field name="is_meetings"/>
+                      <field name="is_options"/>
+                    </group>
+                    <group>
+                      <field name="is_email"/>
+                      <field name="is_online_share"/>
+                    </group>
+                  </group>
+
+                  <notebook>
+        						<page name="g6_checklist" string="G6 Checklist" attrs="{'invisible':[('is_grade_6','=',False)]}">
+                      <field name="is_grade_6" invisible="1"/>
+
+        							<field name="grade_6_ids" readonly="1" force_save="1">
+        								<tree editable="bottom">
+        									<field name="name" string="Description"/>
+        								</tree>
+        								<form>
+        									<group col="4">
+                            <field name="name" string="Description" readonly="1" force_save="1"/>
+        									</group>
+        								</form>
+        							</field>
+        						</page>
+        						<page name="entry_checklist" string="Entry Checklist" attrs="{'invisible':[('is_entry_checklist','=',False)]}">
+                      <field name="is_entry_checklist" invisible="1"/>
+                    	<field name="entry_checklist_ids" readonly="1" force_save="1">
+        								<tree editable="bottom">
+        									<field name="name" string="Description" />
+        									<field name="type"/>
+        								</tree>
+        								<form>
+        									<group col="4">
+                            <field name="name" string="Description"  readonly="1" force_save="1"/>
+          									<field name="type" readonly="1" force_save="1"/>
+        									</group>
+        								</form>
+        							</field>
+        						</page>
+
+
+                    <page name="meetings" string="Meetings" attrs="{'invisible':[('is_meetings','=',False)]}">
+        							<field name="meetings_ids">
+        								<tree editable="bottom">
+        									<field name="name"/>
+        									<field name="description"/>
+        								</tree>
+        								<form>
+        									<group col="4">
+                            <field name="name"/>
+          									<field name="description"/>
+        									</group>
+        								</form>
+        							</field>
+        						</page>
+                    <page name="options" string="Options" attrs="{'invisible':[('is_options','=',False)]}">
+                      <field name="options_ids">
+                        <tree editable="bottom">
+        									<field name="name"/>
+        									<field name="description"/>
+                        </tree>
+                        <form>
+                          <group col="4">
+          									<field name="name"/>
+          									<field name="description"/>
+                          </group>
+                        </form>
+                      </field>
+                    </page>
+
+                    <page name="email" string="Email" attrs="{'invisible':[('is_email','=',False)]}">
+        							<field name="email_ids">
+        								<tree editable="bottom">
+        									<field name="name" />
+                          <field name="type"/>
+                          <field name="attachment" widget="many2many_binary" attrs="{'readonly':[('type','=','video')],'required':[('type','!=','video')]}" />
+                          <!-- <field name="attachment" attrs="{'readonly':[('type','=','video')]}"/> -->
+        									<field name="url" widget="url" attrs="{'readonly':[('type','!=','video')],'required':[('type','=','video')]}"/>
+        								</tree>
+        								<form>
+        									<group col="4">
+          									<field name="name" />
+                            <field name="type"/>
+        									</group>
+        								</form>
+        							</field>
+        						</page>
+
+                    <page name="online_share" string="Online Share" attrs="{'invisible':[('is_online_share','=',False)]}">
+        							<field name="online_share_ids">
+        								<tree editable="bottom">
+        									<field name="name" />
+                          <field name="type"/>
+                          <field name="attachment" widget="many2many_binary" attrs="{'readonly':[('type','=','video')],'required':[('type','!=','video')]}" />
+                          <!-- <field name="attachment" attrs="{'readonly':[('type','=','video')]}"/> -->
+        									<field name="url" attrs="{'readonly':[('type','!=','video')],'required':[('type','=','video')]}"/>
+        								</tree>
+        								<form>
+        									<group col="4">
+          									<field name="name" />
+                            <field name="type"/>
+        									</group>
+        								</form>
+        							</field>
+        						</page>
+
+                  </notebook>
+                </sheet>
+              </form>
+          </field>
+      </record>
+
+      <record id="view_onboarding_plans_tree" model="ir.ui.view">
+          <field name="name">view.onboarding.plans.tree</field>
+          <field name="model">onboarding.plans</field>
+          <field name="arch" type="xml">
+              <tree >
+                <field name="name"/>
+                <field name="application_on"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="action_onboarding_plans_window" model="ir.actions.act_window">
+          <field name="name">Onboarding Plans</field>
+          <field name="res_model">onboarding.plans</field>
+          <field name="view_mode">tree,form</field>
+      </record>
+
+
+      <!-- Onboarding Grade Description-->
+      <record id="view_g_description_form" model="ir.ui.view">
+          <field name="name">view.g.description.form</field>
+          <field name="model">g.description</field>
+          <field name="arch" type="xml">
+              <form>
+                <sheet>
+                  <group>
+                    <group>
+                        <field name="name" string="Description" required="True"/>
+                    </group>
+                  </group>
+                </sheet>
+              </form>
+          </field>
+      </record>
+
+      <record id="view_g_description_tree" model="ir.ui.view">
+          <field name="name">view.g.description.tree</field>
+          <field name="model">g.description</field>
+          <field name="arch" type="xml">
+              <tree >
+                <field name="name" string="Description"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="action_g_description_window" model="ir.actions.act_window">
+          <field name="name">Grade 6</field>
+          <field name="res_model">g.description</field>
+          <field name="view_mode">tree,form</field>
+      </record>
+
+      <!-- Onboarding Entry Checklist Description -->
+      <record id="view_entry_checklist_description_form" model="ir.ui.view">
+          <field name="name">view.entry.checklist.description.form</field>
+          <field name="model">entry.checklist.description</field>
+          <field name="arch" type="xml">
+              <form>
+                <sheet>
+                  <group>
+                    <group>
+                        <field name="name" string="Description" required="True"/>
+                    </group>
+                  </group>
+                </sheet>
+              </form>
+          </field>
+      </record>
+
+      <record id="view_entry_checklist_description_tree" model="ir.ui.view">
+          <field name="name">view.entry.checklist.description.tree</field>
+          <field name="model">entry.checklist.description</field>
+          <field name="arch" type="xml">
+              <tree >
+                <field name="name" string="Description"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="action_entry_checklist_description_window" model="ir.actions.act_window">
+          <field name="name">Entry Checklist Description</field>
+          <field name="res_model">entry.checklist.description</field>
+          <field name="view_mode">tree,form</field>
+      </record>
+
+
+      <menuitem id="menu_onboarding_root" name="Onboarding" web_icon="wc_onboarding,static/description/icon.png"/>
+
+      <menuitem id="menu_onboarding_dashboard" name="Dashboard" parent="menu_onboarding_root"
+        action="action_onboarding_onboarding_window" sequence="1"/>
+
+      <menuitem id="menu_onboarding_config" name="Configuration" parent="menu_onboarding_root"/>
+
+      <menuitem id="menu_onboarding_stage" name="Stages" parent="menu_onboarding_config"
+        action="action_onboarding_stage_window"/>
+
+      <menuitem id="menu_onboarding_checklists" name="Onboarding Checklists" parent="menu_onboarding_config"
+        action="action_onboarding_checklists_window"/>
+
+      <menuitem id="menu_onboarding_plans" name="Onboarding Plans" parent="menu_onboarding_config"
+        action="action_onboarding_plans_window"/>
+
+      <menuitem id="menu_onboarding_g_description" name="Grade 6" parent="menu_onboarding_config"
+        action="action_g_description_window"/>
+
+      <menuitem id="menu_onboarding_entry_checklist_description" name="Entry Checklist" parent="menu_onboarding_config"
+        action="action_entry_checklist_description_window"/>
+  </data>
+</odoo>

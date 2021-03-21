@@ -1,0 +1,96 @@
+<odoo>
+	<record id="hr_applicant_blacklisted_view_form" model="ir.ui.view">
+			<field name="name">res.partner.form.ext</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form"/>
+			<field name="arch" type="xml">
+			  <xpath expr="//field[@name='type']" position="after">
+				  <field name="is_agency" attrs="{'invisible':[('company_type','!=','company')]}" />
+			  </xpath>
+			</field>
+	</record>
+
+	 <record id="view_agency_data_form" model="ir.ui.view">
+			<field name="name">agency.data.form</field>
+			<field name="model">agency.data</field>
+			<field name="arch" type="xml">
+				<form string="Agency Data">
+					<sheet>
+						<div>
+							<label for="name" />
+						</div>
+						<h1>
+							<field  name="name" required="1"/>
+						</h1>
+						<group>
+							<group>
+								<field name="pin_code" password="True" />
+								<field name="partner_id" donmain="[('is_agency','=',True)]" />
+							</group>
+						</group>
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers" />
+						<field name="activity_ids" widget="mail_activity" />
+						<field name="message_ids" widget="mail_thread" />
+					</div>
+				</form>
+			</field>
+	</record>
+
+
+
+	<record id="view_agency_data_tree" model="ir.ui.view">
+        <field name="name">agency.data.tree</field>
+        <field name="model">agency.data</field>
+        <field name="arch" type="xml">
+            <tree>
+				<field name="name" />
+				<field name="partner_id" />
+            </tree>
+        </field>
+    </record>
+	
+	
+    <record id="view_agency_data_search" model="ir.ui.view">
+        <field name="name">agency.data.list.select</field>
+        <field name="model">agency.data</field>
+        <field name="arch" type="xml">
+            <search string="Search Agency">
+                <field name="name"  />
+                <field name="partner_id" />
+            </search>
+        </field>
+    </record>
+	
+	<!-- Import Form For Agencies -->
+	<record model="ir.ui.view" id="import_applications_agency_form_view">
+        <field name="name">agency.import_wizard.form</field>
+            <field name="model">agency.import_wizard</field>
+                <field name="arch" type="xml">
+                    <form string="Import Agencies Application">
+    	               <group>
+                            <group>
+								<field name="agency" />
+								<field name="pin" />
+                                <field name="file" filename="name" />
+                            </group>
+                        </group>
+                    <footer>
+                        <button name="import_data" type="object" string="Confirm" class="btn-primary"/>
+                        or
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                	</form>
+                </field>
+        </record>
+        
+        <record id="action_import_data" model="ir.actions.act_window">
+            <field name="name">Agency Import Applications</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">agency.import_wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="import_applications_agency_form_view"/>
+            <field name="target">new</field>
+        </record>
+</odoo>

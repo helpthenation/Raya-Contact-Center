@@ -1,0 +1,165 @@
+<odoo>
+    <data>
+    <record id="email_template_assessment_meeting" model="mail.template">                                
+  <field name="name">Assessment: Meeting</field>                                
+  <field name="model_id" ref="assessment_center.model_assessment_center_assessment_center"></field>                                
+  <field name="email_from">${object.user_id.email_formatted |safe}</field>                                
+  <!-- <field name="partner_to">${object.targeted_partner |safe}</field> -->
+  <field name="email_to">${object.assign_to.partner_id.email |safe},${object.partner_id.email |safe}</field>  
+  <field name="email_cc">${object.manager.work_email |safe}</field>                             
+  <field name="subject"> Assessment Meeting Attachments for your application for the ${object.job_id.name} Position</field>                     
+  <field name="body_html" type="html">                                    
+    <div style="margin: 0px; padding: 0px;">
+    <!-- Dear ${object.emp_id.name},                                         -->
+     <pre> Dear Assessment Candidates:
+
+ 
+
+Welcome to RCC’s Assessment Center and congratulations for being selected to be part of our upcoming Assessment series. One of our core values is to continuously develop our employees’ skills and abilities, as vital resources within our organization, and ensure their career development is well planned.
+
+ 
+
+You are cordially invited to an <b>Assessment Day</b>, full of simulation techniques, including exercises such as Psychometrics, presentations, group discussion and role play.
+
+ 
+
+<b>Assessment Day Benefits:</b>
+
+1.Demonstrating your areas of strengths as well those in need of development to professionally develop them 
+2.We will be tackling RCC competencies and considering your current roles and responsibilities within your scope as guided by the updated job description. 
+ 
+
+<b>Equipment you will need:</b>
+
+1.RAYA ID
+2.Stationary: pen, marker, notepad 
+3.Calculator
+4.<b><i>For Virtual Assessments :</i></b> Laptop with a working Cam , MIC and with the following applications installed and tested from your side a day prior our assessment (Zoom Application , Outlook _to receive &amp; send exercises results _ , PowerPoint , excel &amp; MS word applications)
+5.Your PROMPTNESS (never be late) 
+6.Your Positive ENERGY
+ 
+
+<b>Important Points to consider:</b>
+
+1.Take COVID-19 safety precautions and ensure <i>wearing your mask/shield at all times</i>, have your hand sanitizer available, and ensure social distancing. 
+2.<b>FREE</b> your day agenda from all meetings/calls and delegate your team members 
+3.Your mobile will be closed all day 
+4.Dress-code: smart casual – comfortable ;) 
+ 
+
+<b>Final Outcome:</b>
+
+1.Personalized report for your assessment results (valid for one year) 
+2.9-box grid given to your direct manager to assess your placement within the team as a whole (In some assessments sent to the Direct Manager)
+ 
+
+Please mark your calendars and be prepared for a FUN DAY.
+
+ 
+
+Good luck!
+
+</pre>
+     
+    <!-- <table border="0" cellpadding="0" cellspacing="0"><tr>
+        % if not recurrent:
+        <td width="130px;">
+            <div style="border-top-left-radius: 3px; border-top-right-radius: 3px; font-size: 12px; border-collapse: separate; text-align: center; font-weight: bold; color: #ffffff; min-height: 18px; background-color: #875A7B; border: 1px solid #875A7B;">
+                ${object.meeting_id.get_interval('dayname', tz=object.partner_id.tz if not object.meeting_id.allday else None)}
+            </div>
+            <div style="font-size: 48px; min-height: auto; font-weight: bold; text-align: center; color: #5F5F5F; background-color: #F8F8F8; border: 1px solid #875A7B;">
+                ${object.meeting_id.get_interval('day', tz=object.partner_id.tz if not object.meeting_id.allday else None)}
+            </div>
+            <div style='font-size: 12px; text-align: center; font-weight: bold; color: #ffffff; background-color: #875A7B;'>
+                ${object.meeting_id.get_interval('month', tz=object.partner_id.tz if not object.meeting_id.allday else None)}
+            </div>
+            <div style="border-collapse: separate; color: #5F5F5F; text-align: center; font-size: 12px; border-bottom-right-radius: 3px; font-weight: bold; border: 1px solid #875A7B; border-bottom-left-radius: 3px;">
+                ${not object.meeting_id.allday and object.meeting_id.get_interval('time', tz=object.partner_id.tz) or ''}
+            </div>
+        </td>
+        <td width="20px;"/>
+        % endif
+    </tr></table> -->
+
+    </div>                                
+  </field>                            
+</record>
+
+<record id="email_template_final_report" model="mail.template">                                
+  <field name="name">Assessment: Final Report</field>                                
+  <field name="model_id" ref="assessment_center.model_assessment_center_assessment_center"></field>                                
+  <field name="email_from">${object.user_id.email_formatted |safe}</field>                                
+  <!-- <field name="partner_to">${object.targeted_partner |safe}</field> -->
+  <field name="email_to">${object.assign_to.partner_id.email |safe},${object.partner_id.email |safe}</field>  
+  <!-- <field name="email_cc">${object.manager.work_email |safe}</field>                              -->
+  <field name="subject"> Assessment Final Report for your application for the ${object.job_id.name} Position</field>                     
+  <field name="body_html" type="html">                                    
+    <div style="margin: 0px; padding: 0px;">                        
+     <pre>
+Dear Applicant: 
+
+We are glad you got a chance to join our <b>Assessment Center journey</b> and thank you for “giving it your best shot along this ride”… well done <b style="font-size: 20px;">&#9786;</b>
+
+This is a comprehensive feedback for your assessment, including the below, for your thorough review and comprehension: 
+
+<b style="color:blue;">&#9632;	Assessment Center Personalized Report</b>
+             <b>Inclusive to the below elements:</b>
+                &#9632;	Assessment Center competencies review 
+                &#9632;	Areas of development related to each competency
+                &#9632;	Points of strength related to each competency
+                &#9632;	Recommended Trainings 
+
+
+To conclude, the report provides an overview of the way you have behaved and performed in various assessment exercises. 
+
+Please take time to review these documents thoroughly with your direct manager to jointly determine the different skills to focus on, development plan and career path. The identified strengths and development needs should then be converted into actionable personal development plans (PDP). 
+
+Should you need any further clarification/support, please reach out to the Assessment Center Team.
+
+Thank You once again and we wish you the best of luck in your next professional steps
+
+RCC Assessment Center Team
+
+</pre>
+
+    </div>                                
+  </field>                            
+</record>
+
+<record id="mail_template_user_input_invite" model="mail.template">
+            <field name="name">Assessment: Test</field>
+            <field name="model_id" ref="assessment_center.model_survey_user_input" />
+            <field name="subject">Participate to ${object.survey_id.title} survey</field>
+            <field name="email_to"></field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-size: 13px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Dear ${object.partner_id.name or 'participant'}<br/><br/>
+        % if object.survey_id.certification:
+            You have been invited to take a new certification.
+        % else:
+            We are conducting a survey and your response would be appreciated.
+        % endif
+        <div style="margin: 16px 0px 16px 0px;">
+            <a href="${(object.get_assessment_start_url()) | safe}"
+                style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                % if object.survey_id.certification:
+                    Start Certification
+                % else:
+                    Start Survey
+                % endif
+            </a>
+        </div>
+        % if object.deadline:
+            Please answer the survey for ${format_date(object.deadline)}.<br/><br/>
+        % endif
+        Thank you for your participation.
+    </p>
+</div>
+            </field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+    </data>  
+</odoo>
